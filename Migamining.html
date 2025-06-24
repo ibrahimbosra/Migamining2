@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Miga Mining App</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    /* Global Styles */
+    body {
+      margin: 0;
+      background-color: #002740;
+      font-family: sans-serif;
+      padding-bottom: 70px;
+      color: #fff;
+      text-align: center;
+    }
+
+    /* Tab Content Styles */
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    /* Home Page Styles */
+    img.crypto-image {
+      width: 95%;
+      max-width: 400px;
+      margin: 15px auto 10px;
+      display: block;
+      border-radius: 12px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.3);
+    }
+
+    .chart-section {
+      max-width: 450px;
+      margin: 10px auto 0;
+      padding: 0 10px;
+    }
+
+    .chart-note {
+      font-size: 13px;
+      color: #ccc;
+      margin-bottom: 5px;
+    }
+
+    .current-price {
+      font-size: 16px;
+      font-weight: bold;
+      margin-bottom: 8px;
+    }
+
+    canvas {
+      background-color: #002740;
+      border-radius: 10px;
+      padding: 6px;
+      box-shadow: 0 0 10px rgba(182, 79, 200, 0.3);
+      width: 100% !important;
+      height: 140px !important;
+      display: block;
+      margin: auto;
+    }
+
+    .info-box {
+      background-color: #013a63;
+      border-radius: 10px;
+      padding: 12px;
+      margin: 15px auto;
+      max-width: 450px;
+      color: #ffffff;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    /* Friends Page Styles */
+    img.invite-image {
+      width: 90%;
+      max-width: 400px;
+      margin: 20px auto 10px;
+      display: block;
+      border-radius: 12px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.3);
+    }
+
+    .invite-container {
+      max-width: 480px;
+      margin: 10px auto;
+      background-color: #013a63;
+      border-radius: 10px;
+      padding: 15px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
+    }
+
+    .invite-link-box {
+      background-color: #004a8f;
+      border-radius: 8px;
+      padding: 12px 15px;
+      margin: 15px auto 10px;
+      word-break: break-all;
+      font-size: 16px;
+      cursor: pointer;
+      user-select: all;
+      box-shadow: 0 0 8px rgba(182, 79, 200, 0.5);
+    }
+
+    .copy-button {
+      display: inline-block;
+      margin-top: 8px;
+      background-color: #b64fc8;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 10px 25px;
+      font-size: 14px;
+      cursor: pointer;
+      user-select: none;
+      transition: background-color 0.3s ease;
+    }
+
+    .copy-button:hover {
+      background-color: #9b3fb0;
+    }
+
+    .copy-message {
+      margin-top: 10px;
+      font-size: 14px;
+      color: #7adea1;
+      height: 18px;
+      opacity: 0;
+      transition: opacity 0.5s ease;
+    }
+
+    .copy-message.visible {
+      opacity: 1;
+    }
+
+    /* Mining Page Styles */
+    .plan-title {
+      font-weight: bold;
+      font-size: 18px;
+      margin: 20px 0 10px;
+      color: #ffffff;
+    }
+
+    .circle-wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 0 10px;
+      gap: 30px;
+    }
+
+    .plan-row {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+      max-width: 400px;
+      gap: 180px;
+    }
+
+    .centered-row {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 10px;
+    }
+
+    .circle-card {
+      width: 85px;
+      height: 85px;
+      background-color: #014a7f;
+      border-radius: 50%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      font-size: 11px;
+      padding: 6px;
+      box-shadow: 0 0 8px rgba(0,0,0,0.3);
+      position: relative;
+      transition: transform 0.3s;
+      margin: 0 5px;
+    }
+
+    .circle-card:hover {
+      transform: scale(1.05);
+    }
+
+    .special {
+      background: linear-gradient(135deg, #b64fc8, #7a28a8);
+      box-shadow: 0 0 20px rgba(182, 79, 200, 0.6);
+    }
+
+    .badge {
+      position: absolute;
+      top: -5px;
+      right: -5px;
+      background-color: gold;
+      color: #000;
+      font-size: 8px;
+      padding: 2px 5px;
+      border-radius: 10px;
+      font-weight: bold;
+      white-space: nowrap;
+    }
+
+    .circle-title {
+      font-weight: bold;
+      margin-bottom: 2px;
+      font-size: 12px;
+    }
+
+    /* Leaders Page Styles */
+    .leaderboard {
+      max-width: 450px;
+      margin: 20px auto 0;
+      padding: 0 15px;
+    }
+
+    .leaderboard h2 {
+      font-size: 20px;
+      font-weight: bold;
+      margin-bottom: 15px;
+      color: #ffffff;
+    }
+
+    .leader {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 14px;
+      background-color: #013a63;
+      border-radius: 10px;
+      margin-bottom: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
+      font-size: 14px;
+    }
+
+    .rank {
+      font-weight: bold;
+      color: #b64fc8;
+      width: 30px;
+    }
+
+    .name {
+      flex-grow: 1;
+      text-align: left;
+      padding: 0 10px;
+      color: #ffffff;
+    }
+
+    .amount {
+      font-weight: bold;
+      color: #7adea1;
+      font-size: 14px;
+      text-align: right;
+      white-space: nowrap;
+    }
+
+    /* Tasks Page Styles */
+    .tasks-container {
+      max-width: 450px;
+      margin: 20px auto;
+      padding: 0 15px;
+    }
+    
+    .task-category {
+      margin-bottom: 25px;
+    }
+    
+    .category-title {
+      font-weight: bold;
+      font-size: 18px;
+      margin-bottom: 12px;
+      color: #b64fc8;
+      text-align: left;
+      padding-left: 5px;
+    }
+    
+    .task-list {
+      background-color: #013a63;
+      border-radius: 10px;
+      padding: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
+    }
+    
+    .task-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 10px;
+      border-bottom: 1px solid #004a8f;
+    }
+    
+    .task-item:last-child {
+      border-bottom: none;
+    }
+    
+    .task-info {
+      flex: 1;
+      text-align: left;
+      padding-right: 10px;
+    }
+    
+    .task-name {
+      font-size: 14px;
+      color: #ffffff;
+      margin-bottom: 3px;
+    }
+    
+    .task-description {
+      font-size: 12px;
+      color: #aee9f7;
+    }
+    
+    .task-reward {
+      font-size: 13px;
+      color: #7adea1;
+      white-space: nowrap;
+      margin-bottom: 5px;
+    }
+    
+    .task-button {
+      background-color: #b64fc8;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 8px 12px;
+      font-size: 13px;
+      cursor: pointer;
+      min-width: 70px;
+      transition: background-color 0.3s;
+    }
+    
+    .task-button:hover {
+      background-color: #9b3fb0;
+    }
+    
+    .task-button:disabled {
+      background-color: #555;
+      cursor: not-allowed;
+    }
+    
+    .progress-bar {
+      height: 5px;
+      background-color: #004a8f;
+      border-radius: 3px;
+      margin-top: 5px;
+      overflow: hidden;
+    }
+    
+    .progress-fill {
+      height: 100%;
+      background-color: #7adea1;
+      border-radius: 3px;
+    }
+
+    /* Bottom Navigation */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      background: #1a1a1a;
+      display: flex;
+      justify-content: space-around;
+      padding: 8px 0;
+      border-top: 1px solid #333;
+      z-index: 999;
+    }
+
+    .nav-item {
+      text-align: center;
+      color: #aaa;
+      font-size: 11px;
+      cursor: pointer;
+      flex: 1;
+      max-width: 20%;
+    }
+
+    .nav-item span {
+      display: block;
+      font-size: 18px;
+      margin-bottom: 2px;
+    }
+
+    .nav-item.active {
+      color: #b64fc8;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Home Tab Content -->
+  <div id="home-tab" class="tab-content active">
+    <img class="crypto-image" src="https://i.ibb.co/vvXPf862/IMG-20250603-113627-516.jpg" alt="Crypto Chart Image" />
+
+    <div class="chart-section">
+      <div class="chart-note">Real-time Miga mining progress</div>
+      <div class="current-price" id="currentMining">Mined: ...</div>
+      <canvas id="fakeChart" width="400" height="160"></canvas>
+    </div>
+
+    <div class="info-box">
+      <strong>What is Miga?</strong><br>
+      Miga is a token mined by users. Total supply is capped at 25 Billion.<br><br>
+      <strong>How to get it?</strong><br>
+      Ready to earn? Choose your plan and start mining Miga now!
+    </div>
+  </div>
+
+  <!-- Friends Tab Content -->
+  <div id="friends-tab" class="tab-content">
+    <img class="invite-image" src="https://i.ibb.co/k21jPLDd/refer-friend-concept-illustration.png" alt="Invite Friends" />
+
+    <div class="invite-container">
+      <div style="font-weight: bold; font-size: 22px; margin-bottom: 10px;">Invite Frens</div>
+      <div style="font-size: 16px; margin-bottom: 8px;">Invite a friend and get <strong>100 Miga</strong></div>
+      <div style="font-size: 14px; margin-bottom: 10px; color: #aee9f7;">
+        Earn 100 Miga for each friend. Invite 10 friends and get a free mining plan!
+      </div>
+      <div id="inviteLink" class="invite-link-box" title="Click to copy link">
+        https://t.me/MigaMining?start=XocvpHjxf4KVv6RU
+      </div>
+      <button id="copyBtn" class="copy-button">📋 Copy link</button>
+      <button onclick="shareLink()" class="copy-button">📤 Share</button>
+      <div id="copyMsg" class="copy-message">Link copied!</div>
+      <div style="margin-top: 15px; font-size: 15px;">
+        Friends invited: <strong>3</strong>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mining Tab Content -->
+  <div id="mining-tab" class="tab-content">
+    <div class="plan-title">Choose Your Mining Plan</div>
+
+    <div class="circle-wrapper">
+      <div class="plan-row">
+        <div class="circle-card">
+          <div class="circle-title">7d</div>
+          <div>0.5 TON</div>
+          <div>×1</div>
+        </div>
+
+        <div class="circle-card">
+          <div class="circle-title">15d</div>
+          <div>0.75 TON</div>
+          <div>×1.5</div>
+        </div>
+      </div>
+
+      <div class="centered-row">
+        <div class="circle-card special">
+          <div class="badge">Most Popular</div>
+          <div class="circle-title">30d</div>
+          <div>1 TON</div>
+          <div>×2</div>
+        </div>
+      </div>
+
+      <div class="plan-row">
+        <div class="circle-card">
+          <div class="circle-title">60d</div>
+          <div>1.5 TON</div>
+          <div>×3</div>
+        </div>
+
+        <div class="circle-card">
+          <div class="circle-title">90d</div>
+          <div>2 TON</div>
+          <div>×4</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tasks Tab Content -->
+  <div id="tasks-tab" class="tab-content">
+    <div class="tasks-container">
+      
+      <!-- Daily Tasks -->
+      <div class="task-category">
+        <div class="category-title">Daily Tasks</div>
+        <div class="task-list">
+          <div class="task-item">
+            <div class="task-info">
+              <div class="task-name">Daily Login</div>
+              <div class="task-description">Sign in daily to claim reward</div>
+              <div class="progress-bar">
+                <div class="progress-fill" style="width: 100%"></div>
+              </div>
+            </div>
+            <div>
+              <div class="task-reward">+50 Miga</div>
+              <button class="task-button">Claim</button>
+            </div>
+          </div>
+          
+          <div class="task-item">
+            <div class="task-info">
+              <div class="task-name">Watch Video</div>
+              <div class="task-description">Watch a short video</div>
+              <div class="progress-bar">
+                <div class="progress-fill" style="width: 0%"></div>
+              </div>
+            </div>
+            <div>
+              <div class="task-reward">+25 Miga</div>
+              <button class="task-button">Start</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Weekly Tasks -->
+      <div class="task-category">
+        <div class="category-title">Weekly Challenges</div>
+        <div class="task-list">
+          <div class="task-item">
+            <div class="task-info">
+              <div class="task-name">Active Miner</div>
+              <div class="task-description">Login 5 days this week</div>
+              <div class="progress-bar">
+                <div class="progress-fill" style="width: 60%"></div>
+              </div>
+            </div>
+            <div>
+              <div class="task-reward">+200 Miga</div>
+              <button class="task-button" disabled>3/5</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Referral Tasks -->
+      <div class="task-category">
+        <div class="category-title">Invite Friends</div>
+        <div class="task-list">
+          <div class="task-item">
+            <div class="task-info">
+              <div class="task-name">First Referral</div>
+              <div class="task-description">Invite your first friend</div>
+              <div class="progress-bar">
+                <div class="progress-fill" style="width: 100%"></div>
+              </div>
+            </div>
+            <div>
+              <div class="task-reward">+100 Miga</div>
+              <button class="task-button">Claim</button>
+            </div>
+          </div>
+          
+          <div class="task-item">
+            <div class="task-info">
+              <div class="task-name">Referral Master</div>
+              <div class="task-description">Invite 5 friends</div>
+              <div class="progress-bar">
+                <div class="progress-fill" style="width: 60%"></div>
+              </div>
+            </div>
+            <div>
+              <div class="task-reward">+1000 Miga</div>
+              <button class="task-button" disabled>3/5</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Special Tasks -->
+      <div class="task-category">
+        <div class="category-title">Special Missions</div>
+        <div class="task-list">
+          <div class="task-item">
+            <div class="task-info">
+              <div class="task-name">Join Telegram</div>
+              <div class="task-description">Join our official channel</div>
+              <div class="progress-bar">
+                <div class="progress-fill" style="width: 0%"></div>
+              </div>
+            </div>
+            <div>
+              <div class="task-reward">+500 Miga</div>
+              <button class="task-button">Join</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Leaders Tab Content -->
+  <div id="leaders-tab" class="tab-content">
+    <div class="leaderboard">
+      <h2>Top Miners</h2>
+      <div id="leadersList"></div>
+    </div>
+  </div>
+
+  <!-- Bottom Navigation -->
+  <div class="bottom-nav">  
+    <div class="nav-item active" data-tab="home-tab">
+      <span>🏠</span>
+      Home
+    </div>
+    <div class="nav-item" data-tab="friends-tab">
+      <span>👥</span>
+      Friends
+    </div>
+    <div class="nav-item" data-tab="mining-tab">
+      <span>⛏️</span>
+      Mining
+    </div>
+    <div class="nav-item" data-tab="tasks-tab">
+      <span>📋</span>
+      Tasks
+    </div>
+    <div class="nav-item" data-tab="leaders-tab">
+      <span>🌐</span>
+      Leaders
+    </div>
+  </div>
+
+  <!-- JavaScript -->
+  <script>
+    // Tab Switching Functionality
+    document.querySelectorAll('.nav-item').forEach(item => {
+      item.addEventListener('click', function() {
+        // Remove active class from all nav items and tabs
+        document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
+        document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+        
+        // Add active class to clicked nav item and corresponding tab
+        this.classList.add('active');
+        const tabId = this.getAttribute('data-tab');
+        document.getElementById(tabId).classList.add('active');
+      });
+    });
+
+    // Home Page Scripts
+    const totalSupply = 25000000000;
+    const miningStartDate = new Date('2025-05-05T00:00:00Z');
+    const secondsInSixMonths = 6 * 30 * 24 * 60 * 60;
+    const miningSpeedPerSecond = totalSupply / secondsInSixMonths;
+
+    async function fetchServerTime() {
+      try {
+        const response = await fetch('https://worldtimeapi.org/api/timezone/etc/utc');
+        const data = await response.json();
+        return new Date(data.utc_datetime);
+      } catch {
+        return new Date();
+      }
+    }
+
+    async function calculateCurrentMining() {
+      const now = await fetchServerTime();
+      let diffSeconds = Math.floor((now - miningStartDate) / 1000);
+      if (diffSeconds < 0) diffSeconds = 0;
+
+      let mined = miningSpeedPerSecond * diffSeconds;
+      return mined > totalSupply ? totalSupply : mined;
+    }
+
+    const currentMiningElem = document.getElementById('currentMining');
+
+    async function updateMining() {
+      const mined = await calculateCurrentMining();
+      currentMiningElem.textContent = 'Mined: ' + mined.toLocaleString(undefined, {maximumFractionDigits: 0}) + ' / 25,000,000,000';
+      return mined;
+    }
+
+    updateMining();
+    setInterval(updateMining, 10000);
+
+    const ctx = document.getElementById('fakeChart').getContext('2d');
+    const initialData = [10000, 30000, 80000, 150000, 400000, 1000000, 3000000, 10000000];
+
+    const fakeChart = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: Array(initialData.length).fill(''),
+        datasets: [{
+          label: '',
+          data: initialData,
+          borderColor: '#b64fc8',
+          backgroundColor: 'rgba(182, 79, 200, 0.1)',
+          tension: 0.4,
+          fill: true,
+          pointRadius: 0,
+          borderWidth: 2,
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+          x: {
+            ticks: { display: false },
+            grid: { color: '#002740' }
+          },
+          y: {
+            display: false,
+            grid: { color: '#004066' }
+          }
+        },
+        plugins: {
+          legend: { display: false }
+        }
+      }
+    });
+
+    // Friends Page Scripts
+    const inviteLink = document.getElementById('inviteLink');
+    const copyBtn = document.getElementById('copyBtn');
+    const copyMsg = document.getElementById('copyMsg');
+
+    function copyText(text) {
+      navigator.clipboard.writeText(text).then(() => {
+        copyMsg.classList.add('visible');
+        setTimeout(() => {
+          copyMsg.classList.remove('visible');
+        }, 1500);
+      });
+    }
+
+    inviteLink.addEventListener('click', () => {
+      copyText(inviteLink.textContent.trim());
+    });
+
+    copyBtn.addEventListener('click', () => {
+      copyText(inviteLink.textContent.trim());
+    });
+
+    function shareLink() {
+      if (navigator.share) {
+        navigator.share({
+          title: 'Join Miga Mining!',
+          text: 'Get 100 Miga by joining through my link:',
+          url: inviteLink.textContent.trim()
+        }).catch(console.error);
+      } else {
+        copyText(inviteLink.textContent.trim());
+      }
+    }
+
+    // Leaders Page Scripts
+    const startDate = new Date('2025-05-05T00:00:00Z');
+    const today = new Date();
+    const elapsedDays = Math.floor((today - startDate) / (1000 * 60 * 60 * 24));
+
+    const leaders = [
+      { name: 'Evelyn', base: 22773973 },
+      { name: 'crypto_boy88', base: 17974026 },
+      { name: 'Юлия', base: 14865206 },
+      { name: 'Андрей', base: 13964927 },
+      { name: 'رنا', base: 11865962 },
+      { name: 'Raj', base: 8484001 },
+      { name: 'Li Wei', base: 7778291 },
+      { name: 'Olivia', base: 7007971 },
+      { name: 'ghost2025', base: 6800549 },
+      { name: 'سعيد', base: 6485428 },
+            { name: 'Arjun', base: 6085391 },
+      { name: 'Елена', base: 5563901 },
+      { name: 'user_01', base: 5284061 },
+      { name: 'Deepa', base: 4953091 },
+      { name: 'Rakesh', base: 4769164 },
+      { name: 'Isabella', base: 4384091 },
+      { name: 'محمد', base: 3272901 },
+      { name: 'Xu Lei', base: 1996380 },
+      { name: 'Mia', base: 1585395 },
+      { name: 'bitBoss', base: 1256842 }
+    ];
+
+    leaders.forEach(leader => {
+      leader.rate = 5000 + Math.floor(Math.random() * 5001);
+    });
+
+    leaders.forEach(leader => {
+      leader.total = leader.base + (leader.rate * elapsedDays);
+    });
+
+    leaders.sort((a, b) => b.total - a.total);
+
+    leaders.forEach((leader, i) => {
+      const div = document.createElement('div');
+      div.className = 'leader';
+      div.innerHTML = `
+        <div class="rank">#${i + 1}</div>
+        <div class="name">${leader.name}</div>
+        <div class="amount">${leader.total.toLocaleString()}</div>
+      `;
+      document.getElementById('leadersList').appendChild(div);
+    });
+
+    // Tasks Page Scripts
+    document.querySelectorAll('.task-button').forEach(button => {
+      button.addEventListener('click', function() {
+        if(!this.disabled) {
+          const originalText = this.textContent;
+          this.textContent = "Claimed!";
+          this.disabled = true;
+          
+          // Reset after 2 seconds for demo purposes
+          setTimeout(() => {
+            this.textContent = originalText;
+            this.disabled = false;
+          }, 2000);
+        }
+      });
+    });
+  </script>
+</body>
+</html>
