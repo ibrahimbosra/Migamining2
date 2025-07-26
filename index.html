@@ -1,815 +1,1377 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Miga Mining App</title>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>بارت زون - متجر قطع غيار الدراجات النارية</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
-    /* Global Styles */
-    body {
+    :root {
+      --primary-color: #f97316;
+      --primary-dark: #ea580c;
+      --secondary-color: #10b981;
+      --dark-color: #1e293b;
+      --light-color: #f8fafc;
+      --gray-color: #64748b;
+      --border-radius: 12px;
+      --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      --transition: all 0.3s ease;
+    }
+
+    * {
+      box-sizing: border-box;
       margin: 0;
-      background-color: #002740;
-      font-family: sans-serif;
-      padding-bottom: 70px;
-      color: #fff;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Cairo', sans-serif;
+      background: linear-gradient(135deg, #f9f9f9, #f1f5f9);
+      color: var(--dark-color);
+      padding-bottom: 80px;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    header {
+      background: linear-gradient(to right, var(--dark-color), #0f172a);
+      color: var(--light-color);
       text-align: center;
+      padding: 1.2rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     }
 
-    /* Tab Content Styles */
-    .tab-content {
-      display: none;
-    }
-
-    .tab-content.active {
-      display: block;
-    }
-
-    /* Home Page Styles */
-    img.crypto-image {
-      width: 95%;
-      max-width: 400px;
-      margin: 15px auto 10px;
-      display: block;
-      border-radius: 12px;
-      box-shadow: 0 0 15px rgba(0,0,0,0.3);
-    }
-
-    .chart-section {
-      max-width: 450px;
-      margin: 10px auto 0;
-      padding: 0 10px;
-    }
-
-    .chart-note {
-      font-size: 13px;
-      color: #ccc;
-      margin-bottom: 5px;
-    }
-
-    .current-price {
-      font-size: 16px;
-      font-weight: bold;
-      margin-bottom: 8px;
-    }
-
-    canvas {
-      background-color: #002740;
-      border-radius: 10px;
-      padding: 6px;
-      box-shadow: 0 0 10px rgba(182, 79, 200, 0.3);
-      width: 100% !important;
-      height: 140px !important;
-      display: block;
-      margin: auto;
-    }
-
-    .info-box {
-      background-color: #013a63;
-      border-radius: 10px;
-      padding: 12px;
-      margin: 15px auto;
-      max-width: 450px;
-      color: #ffffff;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
-      font-size: 13px;
-      line-height: 1.5;
-    }
-
-    /* Friends Page Styles */
-    img.invite-image {
-      width: 90%;
-      max-width: 400px;
-      margin: 20px auto 10px;
-      display: block;
-      border-radius: 12px;
-      box-shadow: 0 0 15px rgba(0,0,0,0.3);
-    }
-
-    .invite-container {
-      max-width: 480px;
-      margin: 10px auto;
-      background-color: #013a63;
-      border-radius: 10px;
-      padding: 15px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
-    }
-
-    .invite-link-box {
-      background-color: #004a8f;
-      border-radius: 8px;
-      padding: 12px 15px;
-      margin: 15px auto 10px;
-      word-break: break-all;
-      font-size: 16px;
-      cursor: pointer;
-      user-select: all;
-      box-shadow: 0 0 8px rgba(182, 79, 200, 0.5);
-    }
-
-    .copy-button {
-      display: inline-block;
-      margin-top: 8px;
-      background-color: #b64fc8;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      padding: 10px 25px;
-      font-size: 14px;
-      cursor: pointer;
-      user-select: none;
-      transition: background-color 0.3s ease;
-    }
-
-    .copy-button:hover {
-      background-color: #9b3fb0;
-    }
-
-    .copy-message {
-      margin-top: 10px;
-      font-size: 14px;
-      color: #7adea1;
-      height: 18px;
-      opacity: 0;
-      transition: opacity 0.5s ease;
-    }
-
-    .copy-message.visible {
-      opacity: 1;
-    }
-
-    /* Mining Page Styles */
-    .plan-title {
-      font-weight: bold;
-      font-size: 18px;
-      margin: 20px 0 10px;
-      color: #ffffff;
-    }
-
-    .circle-wrapper {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 0 10px;
-      gap: 30px;
-    }
-
-    .plan-row {
+    .header-content {
+      max-width: 1200px;
+      margin: 0 auto;
       display: flex;
       justify-content: space-between;
-      width: 100%;
-      max-width: 400px;
-      gap: 180px;
-    }
-
-    .centered-row {
-      display: flex;
-      justify-content: center;
-      margin-bottom: 10px;
-    }
-
-    .circle-card {
-      width: 85px;
-      height: 85px;
-      background-color: #014a7f;
-      border-radius: 50%;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
       align-items: center;
-      font-size: 11px;
-      padding: 6px;
-      box-shadow: 0 0 8px rgba(0,0,0,0.3);
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+    }
+
+    .logo i {
+      color: var(--primary-color);
+      font-size: 1.8rem;
+    }
+
+    .logo h1 {
+      font-size: 1.6rem;
+      font-weight: 700;
+    }
+
+    .header-icons {
+      display: flex;
+      gap: 15px;
+    }
+
+    .icon-btn {
+      background: rgba(255, 255, 255, 0.1);
+      border: none;
+      border-radius: 50%;
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      cursor: pointer;
+      transition: var(--transition);
       position: relative;
-      transition: transform 0.3s;
-      margin: 0 5px;
     }
 
-    .circle-card:hover {
-      transform: scale(1.05);
+    .icon-btn:hover {
+      background: var(--primary-color);
+      transform: translateY(-2px);
     }
 
-    .special {
-      background: linear-gradient(135deg, #b64fc8, #7a28a8);
-      box-shadow: 0 0 20px rgba(182, 79, 200, 0.6);
-    }
-
-    .badge {
+    .cart-count {
       position: absolute;
       top: -5px;
       right: -5px;
-      background-color: gold;
-      color: #000;
-      font-size: 8px;
-      padding: 2px 5px;
-      border-radius: 10px;
-      font-weight: bold;
-      white-space: nowrap;
-    }
-
-    .circle-title {
-      font-weight: bold;
-      margin-bottom: 2px;
-      font-size: 12px;
-    }
-
-    /* Leaders Page Styles */
-    .leaderboard {
-      max-width: 450px;
-      margin: 20px auto 0;
-      padding: 0 15px;
-    }
-
-    .leaderboard h2 {
-      font-size: 20px;
-      font-weight: bold;
-      margin-bottom: 15px;
-      color: #ffffff;
-    }
-
-    .leader {
+      background: var(--secondary-color);
+      color: white;
+      font-size: 0.7rem;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
       display: flex;
-      justify-content: space-between;
       align-items: center;
-      padding: 12px 14px;
-      background-color: #013a63;
-      border-radius: 10px;
-      margin-bottom: 10px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
-      font-size: 14px;
+      justify-content: center;
     }
 
-    .rank {
-      font-weight: bold;
-      color: #b64fc8;
-      width: 30px;
+    .page-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px 15px;
+      min-height: calc(100vh - 200px);
     }
 
-    .name {
-      flex-grow: 1;
-      text-align: left;
-      padding: 0 10px;
-      color: #ffffff;
-    }
-
-    .amount {
-      font-weight: bold;
-      color: #7adea1;
-      font-size: 14px;
-      text-align: right;
-      white-space: nowrap;
-    }
-
-    /* Tasks Page Styles */
-    .tasks-container {
-      max-width: 450px;
-      margin: 20px auto;
-      padding: 0 15px;
-    }
-    
-    .task-category {
-      margin-bottom: 25px;
-    }
-    
-    .category-title {
-      font-weight: bold;
-      font-size: 18px;
-      margin-bottom: 12px;
-      color: #b64fc8;
-      text-align: left;
-      padding-left: 5px;
-    }
-    
-    .task-list {
-      background-color: #013a63;
-      border-radius: 10px;
-      padding: 10px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
-    }
-    
-    .task-item {
+    /* صفحة الرئيسية */
+    .hero {
+      background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('https://images.unsplash.com/photo-1511994298241-608e28f14fde?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80');
+      background-size: cover;
+      background-position: center;
+      border-radius: var(--border-radius);
+      padding: 60px 30px;
+      margin: 20px 0;
+      color: white;
+      text-align: center;
+      box-shadow: var(--box-shadow);
+      animation: fadeIn 1s ease;
       display: flex;
-      justify-content: space-between;
+      flex-direction: column;
+      justify-content: center;
       align-items: center;
-      padding: 12px 10px;
-      border-bottom: 1px solid #004a8f;
+      min-height: 400px;
     }
-    
-    .task-item:last-child {
-      border-bottom: none;
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
     }
-    
-    .task-info {
-      flex: 1;
-      text-align: left;
-      padding-right: 10px;
+
+    .hero h2 {
+      font-size: 2.5rem;
+      margin-bottom: 20px;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
     }
-    
-    .task-name {
-      font-size: 14px;
-      color: #ffffff;
-      margin-bottom: 3px;
+
+    .hero p {
+      font-size: 1.2rem;
+      max-width: 600px;
+      margin: 0 auto 30px;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
     }
-    
-    .task-description {
-      font-size: 12px;
-      color: #aee9f7;
-    }
-    
-    .task-reward {
-      font-size: 13px;
-      color: #7adea1;
-      white-space: nowrap;
-      margin-bottom: 5px;
-    }
-    
-    .task-button {
-      background-color: #b64fc8;
+
+    .btn {
+      background: var(--primary-color);
       color: white;
       border: none;
-      border-radius: 8px;
-      padding: 8px 12px;
-      font-size: 13px;
+      border-radius: 30px;
+      padding: 14px 32px;
+      font-family: 'Cairo', sans-serif;
+      font-weight: 700;
+      font-size: 1.1rem;
       cursor: pointer;
-      min-width: 70px;
-      transition: background-color 0.3s;
-    }
-    
-    .task-button:hover {
-      background-color: #9b3fb0;
-    }
-    
-    .task-button:disabled {
-      background-color: #555;
-      cursor: not-allowed;
-    }
-    
-    .progress-bar {
-      height: 5px;
-      background-color: #004a8f;
-      border-radius: 3px;
-      margin-top: 5px;
-      overflow: hidden;
-    }
-    
-    .progress-fill {
-      height: 100%;
-      background-color: #7adea1;
-      border-radius: 3px;
+      transition: var(--transition);
+      display: inline-block;
+      box-shadow: 0 4px 15px rgba(249, 115, 22, 0.4);
+      animation: pulse 2s infinite;
     }
 
-    /* Bottom Navigation */
-    .bottom-nav {
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
+
+    .btn:hover {
+      background: var(--primary-dark);
+      transform: translateY(-5px);
+      box-shadow: 0 6px 20px rgba(249, 115, 22, 0.5);
+      animation: none;
+    }
+
+    .search-container {
+      display: flex;
+      margin: 40px auto;
+      background: white;
+      border-radius: 30px;
+      overflow: hidden;
+      box-shadow: var(--box-shadow);
+      max-width: 700px;
+      border: 2px solid #e2e8f0;
+      transition: var(--transition);
+    }
+
+    .search-container:focus-within {
+      border-color: var(--primary-color);
+      box-shadow: 0 6px 20px rgba(249, 115, 22, 0.2);
+    }
+
+    .search-input {
+      flex: 1;
+      padding: 16px 25px;
+      border: none;
+      font-family: 'Cairo', sans-serif;
+      font-size: 1.1rem;
+      background: transparent;
+    }
+
+    .search-input:focus {
+      outline: none;
+    }
+
+    .search-input::placeholder {
+      color: #94a3b8;
+    }
+
+    .search-btn {
+      background: var(--primary-color);
+      color: white;
+      border: none;
+      padding: 0 30px;
+      cursor: pointer;
+      transition: var(--transition);
+      font-size: 1.2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .search-btn:hover {
+      background: var(--primary-dark);
+    }
+
+    .return-policy {
+      background: #f0fdfa;
+      border-radius: var(--border-radius);
+      padding: 25px;
+      margin: 50px auto;
+      max-width: 800px;
+      text-align: center;
+      border-left: 5px solid var(--secondary-color);
+      box-shadow: var(--box-shadow);
+    }
+
+    .return-policy i {
+      font-size: 2.5rem;
+      color: var(--secondary-color);
+      margin-bottom: 15px;
+    }
+
+    .return-policy h3 {
+      font-size: 1.4rem;
+      color: var(--dark-color);
+      margin-bottom: 15px;
+    }
+
+    .return-policy p {
+      color: var(--gray-color);
+      font-size: 1.05rem;
+      max-width: 600px;
+      margin: 0 auto;
+      line-height: 1.8;
+    }
+
+    /* تصميم مشترك لصفحات المنتجات والعروض والخصومات */
+    .section-title {
+      text-align: center;
+      margin: 20px 0 30px;
+      font-size: 2rem;
+      color: var(--dark-color);
+      position: relative;
+      padding-bottom: 15px;
+    }
+
+    .section-title::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80px;
+      height: 4px;
+      background: var(--primary-color);
+      border-radius: 2px;
+    }
+
+    /* رسالة الصفحة قيد التطوير */
+    .under-construction {
+      background: white;
+      border-radius: var(--border-radius);
+      padding: 40px 30px;
+      margin: 30px 0;
+      text-align: center;
+      box-shadow: var(--box-shadow);
+      animation: fadeIn 0.8s ease;
+    }
+
+    .under-construction i {
+      font-size: 3.5rem;
+      color: var(--primary-color);
+      margin-bottom: 20px;
+      display: block;
+    }
+
+    .under-construction h3 {
+      font-size: 1.6rem;
+      color: var(--dark-color);
+      margin-bottom: 20px;
+    }
+
+    .under-construction p {
+      color: var(--gray-color);
+      font-size: 1.1rem;
+      line-height: 1.8;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    /* صفحة السلة */
+    .empty-cart {
+      background: white;
+      border-radius: var(--border-radius);
+      padding: 40px 30px;
+      margin: 30px 0;
+      text-align: center;
+      box-shadow: var(--box-shadow);
+      animation: fadeIn 0.8s ease;
+    }
+
+    .empty-cart i {
+      font-size: 4rem;
+      color: #cbd5e1;
+      margin-bottom: 20px;
+      display: block;
+    }
+
+    .empty-cart h3 {
+      font-size: 1.8rem;
+      color: var(--dark-color);
+      margin-bottom: 20px;
+    }
+
+    .empty-cart p {
+      color: var(--gray-color);
+      font-size: 1.1rem;
+      line-height: 1.8;
+      max-width: 500px;
+      margin: 0 auto 30px;
+    }
+
+    /* صفحة التواصل */
+    .contact-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 30px;
+      margin-top: 30px;
+    }
+
+    .contact-info {
+      flex: 1;
+      min-width: 300px;
+      background: white;
+      border-radius: var(--border-radius);
+      padding: 30px;
+      box-shadow: var(--box-shadow);
+    }
+
+    .contact-map {
+      flex: 2;
+      min-width: 300px;
+      border-radius: var(--border-radius);
+      overflow: hidden;
+      box-shadow: var(--box-shadow);
+      position: relative;
+    }
+
+    .contact-address {
+      text-align: center;
+      font-size: 1rem;
+      color: var(--dark-color);
+      background: #f8fafc;
+      padding: 10px 12px;
+      border-radius: 8px;
+      font-weight: 600;
+      margin-bottom: 15px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .map-frame {
+      height: 400px;
+      width: 100%;
+      border: none;
+    }
+
+    .contact-item {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      margin-bottom: 25px;
+      padding-bottom: 25px;
+      border-bottom: 1px solid #e2e8f0;
+      transition: var(--transition);
+    }
+
+    .contact-item:hover {
+      transform: translateX(-5px);
+    }
+
+    .contact-icon {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #ffedd5, #fed7aa);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      color: var(--primary-color);
+    }
+
+    .contact-details h3 {
+      font-size: 1.2rem;
+      margin-bottom: 5px;
+      color: var(--dark-color);
+    }
+
+    .contact-details a {
+      color: var(--gray-color);
+      text-decoration: none;
+      transition: var(--transition);
+      display: block;
+    }
+
+    .contact-details a:hover {
+      color: var(--primary-color);
+    }
+
+    .phone-container {
+      text-align: center;
+      margin-bottom: 30px;
+      width: 100%;
+    }
+
+    .phone-number {
+      display: inline-block;
+      background: linear-gradient(135deg, #ffedd5, #fed7aa);
+      color: var(--dark-color);
+      font-size: 1.3rem;
+      font-weight: 700;
+      padding: 12px 25px;
+      border-radius: 30px;
+      margin-bottom: 15px;
+      transition: var(--transition);
+      text-decoration: none;
+    }
+
+    .phone-number:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 20px rgba(249, 115, 22, 0.3);
+      background: linear-gradient(135deg, #fed7aa, #ffedd5);
+    }
+
+    .phone-number i {
+      margin-left: 10px;
+      color: var(--primary-color);
+    }
+
+    .social-links {
+      display: flex;
+      gap: 15px;
+      margin-top: 20px;
+      justify-content: center;
+      border-top: 1px solid #e2e8f0;
+      padding-top: 20px;
+    }
+
+    .social-link {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #f0f9ff, #e0f2fe);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      color: var(--primary-color);
+      transition: var(--transition);
+      text-decoration: none;
+    }
+
+    .social-link:hover {
+      transform: translateY(-5px);
+      background: var(--primary-color);
+      color: white;
+    }
+
+    .contact-form {
+      margin-top: 40px;
+      background: white;
+      border-radius: var(--border-radius);
+      padding: 30px;
+      box-shadow: var(--box-shadow);
+    }
+
+    .form-title {
+      text-align: center;
+      font-size: 1.5rem;
+      color: var(--dark-color);
+      margin-bottom: 25px;
+      position: relative;
+      padding-bottom: 10px;
+    }
+
+    .form-title::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 60px;
+      height: 3px;
+      background: var(--primary-color);
+      border-radius: 2px;
+    }
+
+    .form-group {
+      margin-bottom: 25px;
+      position: relative;
+    }
+
+    .form-group label {
+      display: none;
+    }
+
+    .form-group input,
+    .form-group textarea {
+      width: 100%;
+      padding: 14px 18px;
+      border: 2px solid #e2e8f0;
+      border-radius: var(--border-radius);
+      font-family: 'Cairo', sans-serif;
+      font-size: 1rem;
+      transition: var(--transition);
+    }
+
+    .form-group input::placeholder,
+    .form-group textarea::placeholder {
+      color: var(--gray-color);
+      opacity: 1;
+      transition: var(--transition);
+    }
+
+    .form-group input:focus::placeholder,
+    .form-group textarea:focus::placeholder {
+      opacity: 0.5;
+    }
+
+    .form-group input:focus,
+    .form-group textarea:focus {
+      outline: none;
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.2);
+    }
+
+    .form-group textarea {
+      height: 150px;
+      resize: vertical;
+    }
+
+    #phone {
+      text-align: right;
+      direction: rtl;
+    }
+    
+    #phone::placeholder {
+      text-align: right;
+      direction: rtl;
+    }
+
+    .submit-btn {
+      background: var(--primary-color);
+      color: white;
+      border: none;
+      border-radius: 30px;
+      padding: 14px 35px;
+      font-family: 'Cairo', sans-serif;
+      font-weight: 700;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: var(--transition);
+      display: block;
+      margin: 20px auto 0;
+      box-shadow: 0 4px 15px rgba(249, 115, 22, 0.4);
+    }
+
+    .submit-btn:hover {
+      background: var(--primary-dark);
+      transform: translateY(-5px);
+      box-shadow: 0 6px 20px rgba(249, 115, 22, 0.5);
+    }
+
+    /* التصميم للصفحات المخفية */
+    .page {
+      display: none;
+      animation: fadeIn 0.5s ease;
+    }
+
+    .page.active {
+      display: block;
+    }
+
+    /* التذييل */
+    nav {
       position: fixed;
       bottom: 0;
       width: 100%;
-      background: #1a1a1a;
+      background-color: white;
       display: flex;
       justify-content: space-around;
-      padding: 8px 0;
-      border-top: 1px solid #333;
-      z-index: 999;
+      border-top: 1px solid #e2e8f0;
+      box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.08);
+      padding: 10px 0;
+      z-index: 100;
     }
 
-    .nav-item {
+    .nav-btn {
+      background: none;
+      border: none;
+      padding: 8px 5px;
       text-align: center;
-      color: #aaa;
-      font-size: 11px;
-      cursor: pointer;
       flex: 1;
-      max-width: 20%;
+      color: var(--gray-color);
+      font-size: 0.8rem;
+      transition: var(--transition);
+      position: relative;
     }
 
-    .nav-item span {
+    .nav-btn.active, .nav-btn:hover {
+      color: var(--primary-color);
+    }
+
+    .nav-btn.active::after {
+      content: '';
+      position: absolute;
+      top: -8px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 35px;
+      height: 4px;
+      background: var(--primary-color);
+      border-radius: 2px;
+    }
+
+    .nav-btn i {
       display: block;
-      font-size: 18px;
-      margin-bottom: 2px;
+      font-size: 1.5rem;
+      margin-bottom: 5px;
     }
 
-    .nav-item.active {
-      color: #b64fc8;
+    /* تصميم صفحة المنتجات */
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 25px;
+      margin-top: 30px;
+    }
+
+    .product-card {
+      background: white;
+      border-radius: var(--border-radius);
+      overflow: hidden;
+      box-shadow: var(--box-shadow);
+      transition: var(--transition);
+      cursor: pointer;
+    }
+
+    .product-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .product-image {
+      height: 200px;
+      background-color: #f1f5f9;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--gray-color);
+      font-size: 1.2rem;
+    }
+
+    .product-details {
+      padding: 20px;
+    }
+
+    .product-name {
+      font-size: 1.3rem;
+      margin-bottom: 10px;
+      color: var(--dark-color);
+    }
+
+    .product-price {
+      font-weight: 700;
+      color: var(--primary-dark);
+      font-size: 1.4rem;
+      margin-bottom: 15px;
+    }
+
+    .add-to-cart {
+      background: var(--primary-color);
+      color: white;
+      border: none;
+      border-radius: 30px;
+      padding: 10px 20px;
+      font-family: 'Cairo', sans-serif;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+      width: 100%;
+      display: block;
+      text-align: center;
+    }
+
+    .add-to-cart:hover {
+      background: var(--primary-dark);
+    }
+
+    /* صفحة تفاصيل المنتج */
+    .product-details-container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    .product-details-card {
+      background: white;
+      border-radius: var(--border-radius);
+      padding: 30px;
+      box-shadow: var(--box-shadow);
+      text-align: center;
+    }
+
+    .product-image-large {
+      height: 300px;
+      background-color: #f1f5f9;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+      border-radius: var(--border-radius);
+    }
+
+    .product-image-large i {
+      font-size: 5rem;
+      color: var(--gray-color);
+    }
+
+    .product-details-card h2 {
+      font-size: 2rem;
+      margin-bottom: 15px;
+      color: var(--dark-color);
+    }
+
+    .description {
+      color: var(--gray-color);
+      font-size: 1.2rem;
+      margin-bottom: 20px;
+    }
+
+    .price {
+      font-size: 1.8rem;
+      color: var(--primary-dark);
+      font-weight: bold;
+      margin-bottom: 30px;
+    }
+
+    .add-to-cart-btn {
+      background: var(--primary-color);
+      color: white;
+      border: none;
+      border-radius: 30px;
+      padding: 12px 30px;
+      font-family: 'Cairo', sans-serif;
+      font-weight: 700;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: var(--transition);
+      display: block;
+      width: 100%;
+      margin-bottom: 15px;
+    }
+
+    .add-to-cart-btn:hover {
+      background: var(--primary-dark);
+    }
+
+    .back-btn {
+      background: #e2e8f0;
+      color: var(--dark-color);
+      border: none;
+      border-radius: 30px;
+      padding: 12px 30px;
+      font-family: 'Cairo', sans-serif;
+      font-weight: 700;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: var(--transition);
+      display: block;
+      width: 100%;
+    }
+
+    .back-btn:hover {
+      background: #cbd5e1;
+    }
+
+    .specs-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 25px 0;
+      text-align: right;
+    }
+
+    .specs-table th, .specs-table td {
+      padding: 12px 15px;
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    .specs-table th {
+      background-color: #f8fafc;
+      color: var(--dark-color);
+      font-weight: 700;
+    }
+
+    .specs-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    /* التجاوب */
+    @media (max-width: 768px) {
+      .header-content {
+        flex-direction: column;
+        gap: 15px;
+      }
+      
+      .hero {
+        padding: 40px 20px;
+        min-height: 350px;
+      }
+      
+      .hero h2 {
+        font-size: 2rem;
+      }
+      
+      .hero p {
+        font-size: 1.1rem;
+      }
+      
+      .logo h1 {
+        font-size: 1.4rem;
+      }
+      
+      .contact-container {
+        flex-direction: column;
+      }
+      
+      .map-frame {
+        height: 300px;
+      }
+      
+      .products-grid {
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      }
+    }
+
+    @media (max-width: 480px) {
+      .hero {
+        padding: 30px 15px;
+        min-height: 300px;
+      }
+      
+      .hero h2 {
+        font-size: 1.7rem;
+      }
+      
+      .hero p {
+        font-size: 1rem;
+      }
+      
+      .search-container {
+        margin: 30px 0;
+      }
+      
+      .btn {
+        padding: 12px 25px;
+        font-size: 1rem;
+      }
+      
+      .section-title {
+        font-size: 1.5rem;
+      }
+      
+      .contact-address {
+        font-size: 0.8rem;
+        white-space: normal;
+      }
+      
+      .under-construction, .empty-cart {
+        padding: 30px 15px;
+      }
+
+      .products-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .product-details-card {
+        padding: 20px;
+      }
+      
+      .product-image-large {
+        height: 200px;
+      }
     }
   </style>
 </head>
 <body>
-
-  <!-- Home Tab Content -->
-  <div id="home-tab" class="tab-content active">
-    <img class="crypto-image" src="https://i.ibb.co/vvXPf862/IMG-20250603-113627-516.jpg" alt="Crypto Chart Image" />
-
-    <div class="chart-section">
-      <div class="chart-note">Real-time Miga mining progress</div>
-      <div class="current-price" id="currentMining">Mined: ...</div>
-      <canvas id="fakeChart" width="400" height="160"></canvas>
-    </div>
-
-    <div class="info-box">
-      <strong>What is Miga?</strong><br>
-      Miga is a token mined by users. Total supply is capped at 25 Billion.<br><br>
-      <strong>How to get it?</strong><br>
-      Ready to earn? Choose your plan and start mining Miga now!
-    </div>
-  </div>
-
-  <!-- Friends Tab Content -->
-  <div id="friends-tab" class="tab-content">
-    <img class="invite-image" src="https://i.ibb.co/k21jPLDd/refer-friend-concept-illustration.png" alt="Invite Friends" />
-
-    <div class="invite-container">
-      <div style="font-weight: bold; font-size: 22px; margin-bottom: 10px;">Invite Frens</div>
-      <div style="font-size: 16px; margin-bottom: 8px;">Invite a friend and get <strong>100 Miga</strong></div>
-      <div style="font-size: 14px; margin-bottom: 10px; color: #aee9f7;">
-        Earn 100 Miga for each friend. Invite 10 friends and get a free mining plan!
+  <header>
+    <div class="header-content">
+      <div class="logo" onclick="showPage('home')">
+        <i class="fas fa-motorcycle"></i>
+        <h1>بـارت زون - PARTZONE</h1>
       </div>
-      <div id="inviteLink" class="invite-link-box" title="Click to copy link">
-        https://t.me/MigaMining?start=XocvpHjxf4KVv6RU
-      </div>
-      <button id="copyBtn" class="copy-button">📋 Copy link</button>
-      <button onclick="shareLink()" class="copy-button">📤 Share</button>
-      <div id="copyMsg" class="copy-message">Link copied!</div>
-      <div style="margin-top: 15px; font-size: 15px;">
-        Friends invited: <strong>3</strong>
+      <div class="header-icons">
+        <button class="icon-btn" onclick="showPage('cart')">
+          <i class="fas fa-shopping-cart"></i>
+          <span class="cart-count">0</span>
+        </button>
       </div>
     </div>
-  </div>
-
-  <!-- Mining Tab Content -->
-  <div id="mining-tab" class="tab-content">
-    <div class="plan-title">Choose Your Mining Plan</div>
-
-    <div class="circle-wrapper">
-      <div class="plan-row">
-        <div class="circle-card">
-          <div class="circle-title">7d</div>
-          <div>0.5 TON</div>
-          <div>×1</div>
-        </div>
-
-        <div class="circle-card">
-          <div class="circle-title">15d</div>
-          <div>0.75 TON</div>
-          <div>×1.5</div>
-        </div>
+  </header>
+  
+  <!-- محتوى الصفحات -->
+  <div class="page-container">
+    <!-- الصفحة الرئيسية -->
+    <div id="home-page" class="page active">
+      <div class="hero">
+        <h2>أفضل قطع الغيار للدراجات النارية</h2>
+        <p>جودة عالية وأسعار تنافسية</p>
+        <button class="btn" onclick="showPage('products')">تصفح المنتجات الآن</button>
       </div>
-
-      <div class="centered-row">
-        <div class="circle-card special">
-          <div class="badge">Most Popular</div>
-          <div class="circle-title">30d</div>
-          <div>1 TON</div>
-          <div>×2</div>
-        </div>
-      </div>
-
-      <div class="plan-row">
-        <div class="circle-card">
-          <div class="circle-title">60d</div>
-          <div>1.5 TON</div>
-          <div>×3</div>
-        </div>
-
-        <div class="circle-card">
-          <div class="circle-title">90d</div>
-          <div>2 TON</div>
-          <div>×4</div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Tasks Tab Content -->
-  <div id="tasks-tab" class="tab-content">
-    <div class="tasks-container">
       
-      <!-- Daily Tasks -->
-      <div class="task-category">
-        <div class="category-title">Daily Tasks</div>
-        <div class="task-list">
-          <div class="task-item">
-            <div class="task-info">
-              <div class="task-name">Daily Login</div>
-              <div class="task-description">Sign in daily to claim reward</div>
-              <div class="progress-bar">
-                <div class="progress-fill" style="width: 100%"></div>
-              </div>
-            </div>
-            <div>
-              <div class="task-reward">+50 Miga</div>
-              <button class="task-button">Claim</button>
-            </div>
+      <div class="search-container">
+        <input type="text" id="search-input" class="search-input" placeholder="ابحث عن قطعة غيار...">
+        <button class="search-btn" id="search-button"><i class="fas fa-search"></i></button>
+      </div>
+      
+      <div class="return-policy">
+        <i class="fas fa-undo-alt"></i>
+        <h3>سياسة الإرجاع والاستبدال</h3>
+        <p>نضمن لكم إرجاع المنتج خلال 24 ساعة في حالة وجود عيب مصنعي. يرجى التواصل مع خدمة العملاء لمعرفة تفاصيل عملية الإرجاع.</p>
+      </div>
+    </div>
+    
+    <!-- صفحة المنتجات -->
+    <div id="products-page" class="page">
+      <h2 class="section-title">منتجاتنا</h2>
+      
+      <div class="products-grid" id="products-container">
+        <!-- سيتم عرض المنتجات هنا -->
+      </div>
+    </div>
+    
+    <!-- صفحة تفاصيل المنتج -->
+    <div id="product-details-page" class="page">
+      <div class="product-details-container" id="product-details-container">
+        <!-- سيتم ملؤها بالبيانات عبر الجافاسكريبت -->
+      </div>
+    </div>
+    
+    <!-- صفحة العروض -->
+    <div id="offers-page" class="page">
+      <h2 class="section-title">العروض الخاصة</h2>
+      
+      <div class="under-construction">
+        <i class="fas fa-tools"></i>
+        <h3>قيد التطوير</h3>
+        <p>
+          السلام عليكم، نحن نعمل على تطوير هذا القسم، يرجى زيارتنا في وقت آخر 
+          أو متابعة صفحاتنا وقنواتنا في قسم التواصل لتتعرفوا على كل جديد!
+        </p>
+      </div>
+    </div>
+    
+    <!-- صفحة الخصومات -->
+    <div id="discounts-page" class="page">
+      <h2 class="section-title">خصومات خاصة</h2>
+      
+      <div class="under-construction">
+        <i class="fas fa-tools"></i>
+        <h3>قيد التطوير</h3>
+        <p>
+          السلام عليكم، نحن نعمل على تطوير هذا القسم، يرجى زيارتنا في وقت آخر 
+          أو متابعة صفحاتنا وقنواتنا في قسم التواصل لتتعرفوا على كل جديد!
+        </p>
+      </div>
+    </div>
+    
+    <!-- صفحة التواصل -->
+    <div id="contact-page" class="page">
+      <h2 class="section-title">تواصل معنا</h2>
+      
+      <div class="contact-container">
+        <div class="contact-info">
+          <div class="phone-container">
+            <a href="tel:+963992288487" class="phone-number">
+              <i class="fas fa-phone-alt"></i>
+              963-99-22-88-487+
+            </a>
           </div>
           
-          <div class="task-item">
-            <div class="task-info">
-              <div class="task-name">Watch Video</div>
-              <div class="task-description">Watch a short video</div>
-              <div class="progress-bar">
-                <div class="progress-fill" style="width: 0%"></div>
-              </div>
-            </div>
-            <div>
-              <div class="task-reward">+25 Miga</div>
-              <button class="task-button">Start</button>
-            </div>
+          <div class="social-links">
+            <a href="https://wa.me/963992288487" class="social-link" target="_blank">
+              <i class="fab fa-whatsapp"></i>
+            </a>
+            <a href="#" class="social-link">
+              <i class="fab fa-facebook-f"></i>
+            </a>
+            <a href="#" class="social-link">
+              <i class="fab fa-telegram"></i>
+            </a>
+            <a href="#" class="social-link">
+              <i class="fab fa-instagram"></i>
+            </a>
           </div>
         </div>
-      </div>
-      
-      <!-- Weekly Tasks -->
-      <div class="task-category">
-        <div class="category-title">Weekly Challenges</div>
-        <div class="task-list">
-          <div class="task-item">
-            <div class="task-info">
-              <div class="task-name">Active Miner</div>
-              <div class="task-description">Login 5 days this week</div>
-              <div class="progress-bar">
-                <div class="progress-fill" style="width: 60%"></div>
-              </div>
-            </div>
-            <div>
-              <div class="task-reward">+200 Miga</div>
-              <button class="task-button" disabled>3/5</button>
-            </div>
-          </div>
-        </div>
-      </div>
-      
-      <!-- Referral Tasks -->
-      <div class="task-category">
-        <div class="category-title">Invite Friends</div>
-        <div class="task-list">
-          <div class="task-item">
-            <div class="task-info">
-              <div class="task-name">First Referral</div>
-              <div class="task-description">Invite your first friend</div>
-              <div class="progress-bar">
-                <div class="progress-fill" style="width: 100%"></div>
-              </div>
-            </div>
-            <div>
-              <div class="task-reward">+100 Miga</div>
-              <button class="task-button">Claim</button>
-            </div>
-          </div>
-          
-          <div class="task-item">
-            <div class="task-info">
-              <div class="task-name">Referral Master</div>
-              <div class="task-description">Invite 5 friends</div>
-              <div class="progress-bar">
-                <div class="progress-fill" style="width: 60%"></div>
-              </div>
-            </div>
-            <div>
-              <div class="task-reward">+1000 Miga</div>
-              <button class="task-button" disabled>3/5</button>
-            </div>
-          </div>
-        </div>
-      </div>
-      
-      <!-- Special Tasks -->
-      <div class="task-category">
-        <div class="category-title">Special Missions</div>
-        <div class="task-list">
-          <div class="task-item">
-            <div class="task-info">
-              <div class="task-name">Join Telegram</div>
-              <div class="task-description">Join our official channel</div>
-              <div class="progress-bar">
-                <div class="progress-fill" style="width: 0%"></div>
-              </div>
-            </div>
-            <div>
-              <div class="task-reward">+500 Miga</div>
-              <button class="task-button">Join</button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Leaders Tab Content -->
-  <div id="leaders-tab" class="tab-content">
-    <div class="leaderboard">
-      <h2>Top Miners</h2>
-      <div id="leadersList"></div>
-    </div>
-  </div>
-
-  <!-- Bottom Navigation -->
-  <div class="bottom-nav">  
-    <div class="nav-item active" data-tab="home-tab">
-      <span>🏠</span>
-      Home
-    </div>
-    <div class="nav-item" data-tab="friends-tab">
-      <span>👥</span>
-      Friends
-    </div>
-    <div class="nav-item" data-tab="mining-tab">
-      <span>⛏️</span>
-      Mining
-    </div>
-    <div class="nav-item" data-tab="tasks-tab">
-      <span>📋</span>
-      Tasks
-    </div>
-    <div class="nav-item" data-tab="leaders-tab">
-      <span>🌐</span>
-      Leaders
-    </div>
-  </div>
-
-  <!-- JavaScript -->
-  <script>
-    // Tab Switching Functionality
-    document.querySelectorAll('.nav-item').forEach(item => {
-      item.addEventListener('click', function() {
-        // Remove active class from all nav items and tabs
-        document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
-        document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
         
-        // Add active class to clicked nav item and corresponding tab
-        this.classList.add('active');
-        const tabId = this.getAttribute('data-tab');
-        document.getElementById(tabId).classList.add('active');
-      });
-    });
-
-    // Home Page Scripts
-    const totalSupply = 25000000000;
-    const miningStartDate = new Date('2025-05-05T00:00:00Z');
-    const secondsInSixMonths = 6 * 30 * 24 * 60 * 60;
-    const miningSpeedPerSecond = totalSupply / secondsInSixMonths;
-
-    async function fetchServerTime() {
-      try {
-        const response = await fetch('https://worldtimeapi.org/api/timezone/etc/utc');
-        const data = await response.json();
-        return new Date(data.utc_datetime);
-      } catch {
-        return new Date();
-      }
-    }
-
-    async function calculateCurrentMining() {
-      const now = await fetchServerTime();
-      let diffSeconds = Math.floor((now - miningStartDate) / 1000);
-      if (diffSeconds < 0) diffSeconds = 0;
-
-      let mined = miningSpeedPerSecond * diffSeconds;
-      return mined > totalSupply ? totalSupply : mined;
-    }
-
-    const currentMiningElem = document.getElementById('currentMining');
-
-    async function updateMining() {
-      const mined = await calculateCurrentMining();
-      currentMiningElem.textContent = 'Mined: ' + mined.toLocaleString(undefined, {maximumFractionDigits: 0}) + ' / 25,000,000,000';
-      return mined;
-    }
-
-    updateMining();
-    setInterval(updateMining, 10000);
-
-    const ctx = document.getElementById('fakeChart').getContext('2d');
-    const initialData = [10000, 30000, 80000, 150000, 400000, 1000000, 3000000, 10000000];
-
-    const fakeChart = new Chart(ctx, {
-      type: 'line',
-      data: {
-        labels: Array(initialData.length).fill(''),
-        datasets: [{
-          label: '',
-          data: initialData,
-          borderColor: '#b64fc8',
-          backgroundColor: 'rgba(182, 79, 200, 0.1)',
-          tension: 0.4,
-          fill: true,
-          pointRadius: 0,
-          borderWidth: 2,
-        }]
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        scales: {
-          x: {
-            ticks: { display: false },
-            grid: { color: '#002740' }
-          },
-          y: {
-            display: false,
-            grid: { color: '#004066' }
-          }
-        },
-        plugins: {
-          legend: { display: false }
-        }
-      }
-    });
-
-    // Friends Page Scripts
-    const inviteLink = document.getElementById('inviteLink');
-    const copyBtn = document.getElementById('copyBtn');
-    const copyMsg = document.getElementById('copyMsg');
-
-    function copyText(text) {
-      navigator.clipboard.writeText(text).then(() => {
-        copyMsg.classList.add('visible');
-        setTimeout(() => {
-          copyMsg.classList.remove('visible');
-        }, 1500);
-      });
-    }
-
-    inviteLink.addEventListener('click', () => {
-      copyText(inviteLink.textContent.trim());
-    });
-
-    copyBtn.addEventListener('click', () => {
-      copyText(inviteLink.textContent.trim());
-    });
-
-    function shareLink() {
-      if (navigator.share) {
-        navigator.share({
-          title: 'Join Miga Mining!',
-          text: 'Get 100 Miga by joining through my link:',
-          url: inviteLink.textContent.trim()
-        }).catch(console.error);
-      } else {
-        copyText(inviteLink.textContent.trim());
-      }
-    }
-
-    // Leaders Page Scripts
-    const startDate = new Date('2025-05-05T00:00:00Z');
-    const today = new Date();
-    const elapsedDays = Math.floor((today - startDate) / (1000 * 60 * 60 * 24));
-
-    const leaders = [
-      { name: 'Evelyn', base: 22773973 },
-      { name: 'crypto_boy88', base: 17974026 },
-      { name: 'Юлия', base: 14865206 },
-      { name: 'Андрей', base: 13964927 },
-      { name: 'رنا', base: 11865962 },
-      { name: 'Raj', base: 8484001 },
-      { name: 'Li Wei', base: 7778291 },
-      { name: 'Olivia', base: 7007971 },
-      { name: 'ghost2025', base: 6800549 },
-      { name: 'سعيد', base: 6485428 },
-            { name: 'Arjun', base: 6085391 },
-      { name: 'Елена', base: 5563901 },
-      { name: 'user_01', base: 5284061 },
-      { name: 'Deepa', base: 4953091 },
-      { name: 'Rakesh', base: 4769164 },
-      { name: 'Isabella', base: 4384091 },
-      { name: 'محمد', base: 3272901 },
-      { name: 'Xu Lei', base: 1996380 },
-      { name: 'Mia', base: 1585395 },
-      { name: 'bitBoss', base: 1256842 }
-    ];
-
-    leaders.forEach(leader => {
-      leader.rate = 5000 + Math.floor(Math.random() * 5001);
-    });
-
-    leaders.forEach(leader => {
-      leader.total = leader.base + (leader.rate * elapsedDays);
-    });
-
-    leaders.sort((a, b) => b.total - a.total);
-
-    leaders.forEach((leader, i) => {
-      const div = document.createElement('div');
-      div.className = 'leader';
-      div.innerHTML = `
-        <div class="rank">#${i + 1}</div>
-        <div class="name">${leader.name}</div>
-        <div class="amount">${leader.total.toLocaleString()}</div>
-      `;
-      document.getElementById('leadersList').appendChild(div);
-    });
-
-    // Tasks Page Scripts
-    document.querySelectorAll('.task-button').forEach(button => {
-      button.addEventListener('click', function() {
-        if(!this.disabled) {
-          const originalText = this.textContent;
-          this.textContent = "Claimed!";
-          this.disabled = true;
+        <div class="contact-map">
+          <div class="contact-address">
+            سوريا - درعا - بصرى الشام - غربي مركز البريد بـ 100 م
+          </div>
+          <iframe 
+            src="https://maps.google.com/maps?q=32.5218423,36.4735972&z=15&output=embed" 
+            class="map-frame"
+            frameborder="0" 
+            style="border:0;" 
+            allowfullscreen="" 
+            loading="lazy" 
+            referrerpolicy="no-referrer-when-downgrade">
+          </iframe>
+        </div>
+      </div>
+      
+      <div class="contact-form">
+        <h3 class="form-title">أرسل رسالة</h3>
+        
+        <form>
+          <div class="form-group">
+            <input type="text" id="name" placeholder="الاسم الكامل" required>
+          </div>
           
-          // Reset after 2 seconds for demo purposes
-          setTimeout(() => {
-            this.textContent = originalText;
-            this.disabled = false;
-          }, 2000);
-        }
+          <div class="form-group">
+            <input type="email" id="email" placeholder="البريد الإلكتروني" required>
+          </div>
+          
+          <div class="form-group">
+            <input type="tel" id="phone" placeholder="رقم الهاتف">
+          </div>
+          
+          <div class="form-group">
+            <textarea id="message" placeholder="الرسالة" required></textarea>
+          </div>
+          
+          <button type="submit" class="submit-btn">إرسال الرسالة</button>
+        </form>
+      </div>
+    </div>
+    
+    <!-- صفحة السلة -->
+    <div id="cart-page" class="page">
+      <h2 class="section-title">سلة التسوق</h2>
+      
+      <div class="empty-cart">
+        <i class="fas fa-shopping-cart"></i>
+        <h3>السلة فارغة في الوقت الحالي</h3>
+        <p>لم تقم بإضافة أي منتجات إلى سلة التسوق بعد. يمكنك تصفح متجرنا وإضافة المنتجات التي ترغب في شرائها.</p>
+        <button class="btn" onclick="showPage('home')">تصفح المنتجات</button>
+      </div>
+    </div>
+  </div>
+  
+  <nav>
+    <button class="nav-btn active" onclick="showPage('home')">
+      <i class="fas fa-home"></i>
+      <span>الرئيسية</span>
+    </button>
+    <button class="nav-btn" onclick="showPage('products')">
+      <i class="fas fa-motorcycle"></i>
+      <span>المنتجات</span>
+    </button>
+    <button class="nav-btn" onclick="showPage('offers')">
+      <i class="fas fa-tags"></i>
+      <span>العروض</span>
+    </button>
+    <button class="nav-btn" onclick="showPage('discounts')">
+      <i class="fas fa-percent"></i>
+      <span>الخصومات</span>
+    </button>
+    <button class="nav-btn" onclick="showPage('contact')">
+      <i class="fas fa-phone"></i>
+      <span>التواصل</span>
+    </button>
+  </nav>
+
+  <script>
+    // وظيفة إظهار الصفحة المحددة وإخفاء البقية
+    function showPage(pageId) {
+      // إخفاء جميع الصفحات
+      document.querySelectorAll('.page').forEach(page => {
+        page.classList.remove('active');
       });
+      
+      // إظهار الصفحة المحددة
+      document.getElementById(`${pageId}-page`).classList.add('active');
+      
+      // تحديث التذييل
+      document.querySelectorAll('.nav-btn').forEach(btn => {
+        btn.classList.remove('active');
+      });
+      
+      // تحديد الزر النشط في التذييل
+      const activeButton = Array.from(document.querySelectorAll('.nav-btn')).find(btn => {
+        return btn.textContent.includes(getPageName(pageId));
+      });
+      
+      if (activeButton) {
+        activeButton.classList.add('active');
+      }
+      
+      // إذا كانت صفحة المنتجات، قم بعرض المنتجات
+      if (pageId === 'products') {
+        displayProducts();
+      }
+    }
+    
+    // الحصول على اسم الصفحة من المعرف
+    function getPageName(pageId) {
+      const pages = {
+        'home': 'الرئيسية',
+        'products': 'المنتجات',
+        'offers': 'العروض',
+        'discounts': 'الخصومات',
+        'contact': 'التواصل',
+        'cart': 'السلة'
+      };
+      return pages[pageId] || 'الرئيسية';
+    }
+    
+    // قاعدة بيانات حقيقية للمنتجات مع تفاصيل أكثر
+    const realDatabase = [
+      {
+        id: 1,
+        name: "بوجي بارت",
+        description: "قطعة غيار عالية الجودة للدراجات النارية، مصنوعة من مواد متينة ومقاومة للحرارة العالية. مثالية لجميع أنواع الدراجات النارية.",
+        price: "5000 ل.س",
+        category: "محرك",
+        brand: "NGK",
+        specifications: {
+          "النوع": "بوجي إيريديوم",
+          "القياس": "CR7EIX",
+          "اللون": "أسود",
+          "المواد": "سبيكة إيريديوم",
+          "الضمان": "سنتان"
+        }
+      },
+      {
+        id: 2,
+        name: "إطار خارجي خلفي",
+        description: "إطار خلفي للدراجات النارية، مصمم لتحمل مختلف الظروف الطرقية. يوفر ثباتًا وأمانًا أثناء القيادة.",
+        price: "100000 ل.س",
+        category: "إطارات",
+        brand: "Michelin",
+        specifications: {
+          "المقاس": "140/70-17",
+          "النوع": "إطار دراجات نارية",
+          "السرعة القصوى": "240 كم/س",
+          "الحمل الأقصى": "350 كغ",
+          "الضمان": "3 سنوات"
+        }
+      },
+      {
+        id: 3,
+        name: "فرامل أمامية",
+        description: "قرص فرامل أمامي عالي الجودة، يوفر كفاءة فرملة ممتازة وأداءً ثابتًا في مختلف الظروف.",
+        price: "75000 ل.س",
+        category: "فرامل",
+        brand: "Brembo",
+        specifications: {
+          "القطر": "320 مم",
+          "السماكة": "5 مم",
+          "الوزن": "1.8 كغ",
+          "المواد": "فولاذ مقاوم للصدأ",
+          "الضمان": "سنة واحدة"
+        }
+      },
+      {
+        id: 4,
+        name: "مرآة جانبية",
+        description: "مرآة جانبية للدراجات النارية، مصممة لتوفير رؤية خلفية واضحة مع الحفاظ على الأناقة.",
+        price: "25000 ل.س",
+        category: "إكسسوارات",
+        brand: "Rizoma",
+        specifications: {
+          "اللون": "أسود",
+          "المواد": "الألومنيوم",
+          "التعديل": "قابل للتعديل",
+          "الضمان": "6 أشهر"
+        }
+      }
+    ];
+    
+    // عرض المنتجات في صفحة المنتجات
+    function displayProducts() {
+      const container = document.getElementById('products-container');
+      container.innerHTML = '';
+      
+      realDatabase.forEach(product => {
+        const productCard = document.createElement('div');
+        productCard.className = 'product-card';
+        productCard.dataset.id = product.id;
+        productCard.innerHTML = `
+          <div class="product-image">
+            <i class="fas fa-cog"></i>
+          </div>
+          <div class="product-details">
+            <h3 class="product-name">${product.name}</h3>
+            <p class="product-price">${product.price}</p>
+            <button class="add-to-cart">إضافة إلى السلة</button>
+          </div>
+        `;
+        
+        // جعل البطاقة قابلة للنقل لصفحة التفاصيل
+        productCard.addEventListener('click', function(e) {
+          // منع تنشيط النقر عند الضغط على زر إضافة إلى السلة
+          if (e.target.classList.contains('add-to-cart')) {
+            e.stopPropagation();
+            return;
+          }
+          showProductDetails(product.id);
+        });
+        
+        container.appendChild(productCard);
+      });
+    }
+    
+    // عرض تفاصيل المنتج
+    function showProductDetails(productId) {
+      const product = realDatabase.find(p => p.id === productId);
+      if (!product) return;
+      
+      const container = document.getElementById('product-details-container');
+      container.innerHTML = `
+        <div class="product-details-card">
+          <div class="product-image-large">
+            <i class="fas fa-cog"></i>
+          </div>
+          <h2>${product.name}</h2>
+          <p class="description">${product.description}</p>
+          <p class="price">${product.price}</p>
+          
+          <table class="specs-table">
+            <tr>
+              <th colspan="2">مواصفات المنتج</th>
+            </tr>
+            ${Object.entries(product.specifications).map(([key, value]) => `
+              <tr>
+                <td>${value}</td>
+                <th>${key}</th>
+              </tr>
+            `).join('')}
+          </table>
+          
+          <button class="add-to-cart-btn">إضافة إلى السلة</button>
+          <button class="back-btn" onclick="showPage('products')">العودة إلى المنتجات</button>
+        </div>
+      `;
+      
+      showPage('product-details');
+    }
+    
+    // إعدادات البحث
+    const searchInput = document.getElementById('search-input');
+    const searchBtn = document.getElementById('search-button');
+    
+    // وظيفة البحث الحقيقية
+    function performSearch() {
+      const query = searchInput.value.trim();
+      
+      if (!query) {
+        showPage('products');
+        displayProducts();
+        return;
+      }
+      
+      // البحث الحرفي في القاعدة الفعلية
+      const found = realDatabase.filter(item => 
+        item.name.includes(query) || item.description.includes(query) || 
+        item.category.includes(query) || item.brand.includes(query)
+      );
+      
+      showPage('products');
+      
+      const container = document.getElementById('products-container');
+      container.innerHTML = '';
+      
+      if (found.length > 0) {
+        found.forEach(product => {
+          const productCard = document.createElement('div');
+          productCard.className = 'product-card';
+          productCard.dataset.id = product.id;
+          productCard.innerHTML = `
+            <div class="product-image">
+              <i class="fas fa-cog"></i>
+            </div>
+            <div class="product-details">
+              <h3 class="product-name">${product.name}</h3>
+              <p class="product-price">${product.price}</p>
+              <button class="add-to-cart">إضافة إلى السلة</button>
+            </div>
+          `;
+          
+          // جعل البطاقة قابلة للنقل لصفحة التفاصيل
+          productCard.addEventListener('click', function(e) {
+            if (e.target.classList.contains('add-to-cart')) {
+              e.stopPropagation();
+              return;
+            }
+            showProductDetails(product.id);
+          });
+          
+          container.appendChild(productCard);
+        });
+      } else {
+        container.innerHTML = `
+          <div class="under-construction" style="grid-column: 1/-1; text-align: center;">
+            <i class="fas fa-search"></i>
+            <h3>لم يتم العثور على منتجات</h3>
+            <p>عذراً، لم نتمكن من العثور على منتجات مطابقة لبحثك: "${query}"</p>
+            <button class="btn" onclick="showPage('products')" style="margin-top: 20px;">عرض جميع المنتجات</button>
+          </div>
+        `;
+      }
+    }
+    
+    // ربط أحداث البحث
+    searchBtn.addEventListener('click', performSearch);
+    searchInput.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') performSearch();
+    });
+    
+    // إرسال النموذج
+    const contactForm = document.querySelector('form');
+    contactForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+      alert('تم إرسال رسالتك بنجاح! سنتواصل معك قريباً.');
+      contactForm.reset();
+    });
+    
+    // تهيئة الصفحة الرئيسية عند التحميل
+    document.addEventListener('DOMContentLoaded', function() {
+      showPage('home');
     });
   </script>
 </body>
