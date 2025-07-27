@@ -70,46 +70,6 @@
       font-weight: 700;
     }
 
-    .header-icons {
-      display: flex;
-      gap: 15px;
-    }
-
-    .icon-btn {
-      background: rgba(255, 255, 255, 0.1);
-      border: none;
-      border-radius: 50%;
-      width: 36px;
-      height: 36px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: white;
-      cursor: pointer;
-      transition: var(--transition);
-      position: relative;
-    }
-
-    .icon-btn:hover {
-      background: var(--primary-color);
-      transform: translateY(-2px);
-    }
-
-    .cart-count {
-      position: absolute;
-      top: -5px;
-      right: -5px;
-      background: var(--secondary-color);
-      color: white;
-      font-size: 0.7rem;
-      width: 18px;
-      height: 18px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
     .page-container {
       max-width: 1200px;
       margin: 0 auto;
@@ -1037,6 +997,22 @@
         margin-bottom: 10px;
       }
     }
+
+    /* التعديلات الجديدة */
+    .cart-count-nav {
+      position: absolute;
+      top: 2px;
+      right: 5px;
+      background: var(--secondary-color);
+      color: white;
+      font-size: 0.7rem;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
   </style>
 </head>
 <body>
@@ -1045,12 +1021,6 @@
       <div class="logo" onclick="showPage('home')">
         <i class="fas fa-motorcycle"></i>
         <h1>بـارت زون - PARTZONE</h1>
-      </div>
-      <div class="header-icons">
-        <button class="icon-btn" onclick="showPage('cart')">
-          <i class="fas fa-shopping-cart"></i>
-          <span class="cart-count">0</span>
-        </button>
       </div>
     </div>
   </header>
@@ -1104,11 +1074,11 @@
       <div class="empty-category" style="grid-column: 1/-1; text-align: center;">
         <i class="fas fa-box-open"></i>
         <h3>لا توجد منتجات حالياً</h3>
-        <p>لم يتم إضافة أي منتجات إلى هذا القسم بعد، يمكنكم متابعة صفحاتنا في قسم التواصل للإطلاع على العروض الجديدة</p>
+        <p>لم يتم إضافة أي منتجات إلى المتجر بعد</p>
       </div>
     </div>
     
-    <!-- صفحة سلة التسوق (تم استبدال صفحة الخصومات بها) -->
+    <!-- صفحة سلة التسوق -->
     <div id="cart-page" class="page">
       <h2 class="section-title">سلة التسوق</h2>
       
@@ -1166,8 +1136,6 @@
           </iframe>
         </div>
       </div>
-      
-      <!-- تم حذف نموذج إرسال الرسالة حسب الطلب -->
     </div>
   </div>
   
@@ -1187,6 +1155,7 @@
     <button class="nav-btn" onclick="showPage('cart')">
       <i class="fas fa-shopping-cart"></i>
       <span>السلة</span>
+      <span class="cart-count-nav">0</span>
     </button>
     <button class="nav-btn" onclick="showPage('contact')">
       <i class="fas fa-phone"></i>
@@ -1404,7 +1373,7 @@
         ? `<img src="${product.imageUrl}" alt="${product.name}" style="width:100%; height:100%; object-fit:contain;">`
         : `<i class="fas fa-cog"></i>`;
       
-      // إنشاء جدول المواصفات
+      // إنشاء جدول المواصفات (اسم الخاصية في اليمين وقيمتها في اليسار)
       let specsTable = '';
       if (product.specifications) {
         specsTable = `
@@ -1415,7 +1384,7 @@
             ${Object.entries(product.specifications).map(([key, value]) => `
               <tr>
                 <td>${value}</td>
-                <th>${key}</th>
+                <td>${key}</td>
               </tr>
             `).join('')}
           </table>
@@ -1473,10 +1442,10 @@
       }
     }
     
-    // تحديث عدد العناصر في السلة
+    // تحديث عدد العناصر في السلة (في شريط التنقل)
     function updateCartCount() {
       const count = cart.reduce((total, item) => total + item.quantity, 0);
-      document.querySelector('.cart-count').textContent = count;
+      document.querySelector('.cart-count-nav').textContent = count;
     }
     
     // تحديث عرض السلة
@@ -1586,29 +1555,30 @@
       }
     }
     
-    // إتمام عملية الشراء
+    // إتمام عملية الشراء عبر الواتساب
     function checkout() {
       if (cart.length === 0) return;
       
-      // حساب المجموع الكلي
-      const totalPrice = cart.reduce((total, item) => {
-        const priceStr = item.price.replace(/[^0-9]/g, '');
-        const price = parseInt(priceStr) || 0;
-        return total + (price * item.quantity);
-      }, 0);
+      // بناء رسالة الواتساب
+      let message = "السلام عليكم! أريد شراء هذه المنتجات، هل كل شيئ متوفر؟\n\n";
       
-      const formattedTotal = new Intl.NumberFormat('ar-SY').format(totalPrice) + ' ل.س';
+      cart.forEach(item => {
+        message += `- ${item.name} (${item.quantity}x)\n`;
+      });
       
-      // عرض تأكيد الشراء
-      const confirmed = confirm(`هل تريد إتمام عملية الشراء بقيمة ${formattedTotal}؟`);
+      // ترميز الرسالة لرابط الواتساب
+      const whatsappUrl = `https://wa.me/963992288487?text=${encodeURIComponent(message)}`;
       
-      if (confirmed) {
-        // هنا يمكنك إضافة منطق إتمام الشراء
-        cart = [];
-        updateCartCount();
-        updateCartDisplay();
-        showNotification('تم إتمام عملية الشراء بنجاح! شكراً لثقتك بنا');
-      }
+      // فتح رابط الواتساب في نافذة جديدة
+      window.open(whatsappUrl, '_blank');
+      
+      // تفريغ السلة
+      cart = [];
+      updateCartCount();
+      updateCartDisplay();
+      
+      // عرض تنبيه
+      showNotification('تم إرسال طلبك بنجاح عبر الواتساب!');
     }
     
     // عرض تنبيه
