@@ -1013,6 +1013,142 @@
       align-items: center;
       justify-content: center;
     }
+
+    /* تصميم صفحة العروض */
+    .offers-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 25px;
+      margin-top: 30px;
+    }
+
+    .offer-card {
+      background: white;
+      border-radius: var(--border-radius);
+      overflow: hidden;
+      box-shadow: var(--box-shadow);
+      transition: var(--transition);
+      cursor: pointer;
+      border-top: 4px solid var(--secondary-color);
+    }
+
+    .offer-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .offer-image {
+      height: 180px;
+      background-color: #f1f5f9;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--gray-color);
+      font-size: 1.2rem;
+      position: relative;
+    }
+
+    .offer-badge {
+      position: absolute;
+      top: 15px;
+      left: 15px;
+      background: var(--secondary-color);
+      color: white;
+      padding: 5px 15px;
+      border-radius: 20px;
+      font-weight: bold;
+      font-size: 0.9rem;
+    }
+
+    .offer-details {
+      padding: 20px;
+    }
+
+    .offer-name {
+      font-size: 1.3rem;
+      margin-bottom: 10px;
+      color: var(--dark-color);
+    }
+
+    .offer-description {
+      color: var(--gray-color);
+      margin-bottom: 15px;
+      line-height: 1.6;
+    }
+
+    .offer-price {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 15px;
+    }
+
+    .original-price {
+      text-decoration: line-through;
+      color: var(--gray-color);
+    }
+
+    .discounted-price {
+      font-weight: 700;
+      color: var(--primary-dark);
+      font-size: 1.4rem;
+    }
+
+    .offer-products {
+      margin-top: 15px;
+      padding-top: 15px;
+      border-top: 1px dashed #e2e8f0;
+    }
+
+    .offer-products-title {
+      font-size: 0.9rem;
+      color: var(--gray-color);
+      margin-bottom: 10px;
+    }
+
+    .offer-products-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .offer-product-item {
+      background: #f8fafc;
+      border-radius: 4px;
+      padding: 5px 10px;
+      font-size: 0.8rem;
+      color: var(--dark-color);
+    }
+
+    .time-remaining {
+      background: #ffedd5;
+      color: #9a3412;
+      padding: 5px 10px;
+      border-radius: 4px;
+      font-size: 0.8rem;
+      margin-top: 10px;
+      display: inline-block;
+    }
+
+    .add-offer-to-cart {
+      background: var(--secondary-color);
+      color: white;
+      border: none;
+      border-radius: 30px;
+      padding: 10px 20px;
+      font-family: 'Cairo', sans-serif;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+      width: 100%;
+      display: block;
+      text-align: center;
+      margin-top: 15px;
+    }
+
+    .add-offer-to-cart:hover {
+      background: #059669;
+    }
   </style>
 </head>
 <body>
@@ -1071,10 +1207,8 @@
     <div id="offers-page" class="page">
       <h2 class="section-title">العروض الخاصة</h2>
       
-      <div class="empty-category" style="grid-column: 1/-1; text-align: center;">
-        <i class="fas fa-box-open"></i>
-        <h3>لا توجد منتجات حالياً</h3>
-        <p>لا توجد منتجات متاحة في هذا القسم حالياً. تابع صفحاتنا على وسائل التواصل الاجتماعي من خلال قسم "التواصل" للبقاء على اطلاع بآخر التحديثات والعروض.</p>
+      <div class="offers-grid" id="offers-container">
+        <!-- سيتم عرض العروض هنا -->
       </div>
     </div>
     
@@ -1188,6 +1322,7 @@
     let categories = [];
     let cart = [];
     let productMap = {};
+    let offerMap = {};
 
     // وظيفة إظهار الصفحة المحددة وإخفاء البقية
     function showPage(pageId) {
@@ -1217,6 +1352,11 @@
       if (pageId === 'products') {
         loadCategories();
         displayProducts();
+      }
+      
+      // إذا كانت صفحة العروض، قم بتحميل العروض
+      if (pageId === 'offers') {
+        loadOffers();
       }
       
       // إذا كانت صفحة السلة، قم بتحديث محتواها
@@ -1410,6 +1550,188 @@
       showPage('product-details');
     }
     
+    // تحميل العروض من Firebase
+    function loadOffers() {
+      const container = document.getElementById('offers-container');
+      container.innerHTML = '';
+      
+      database.ref('offers').once('value').then(snapshot => {
+        if (!snapshot.exists()) {
+          container.innerHTML = `
+            <div class="empty-category" style="grid-column: 1/-1; text-align: center;">
+              <i class="fas fa-tags"></i>
+              <h3>لا توجد عروض حالياً</h3>
+              <p>لم يتم إضافة أي عروض إلى المتجر بعد</p>
+            </div>
+          `;
+          return;
+        }
+        
+        let hasActiveOffers = false;
+        
+        snapshot.forEach(child => {
+          const offer = child.val();
+          offerMap[child.key] = offer;
+          
+          // التحقق من انتهاء مدة العرض إذا كان مؤقتاً
+          if (offer.autoDelete && offer.endDate) {
+            const endDate = new Date(offer.endDate);
+            const now = new Date();
+            
+            if (endDate <= now) {
+              // حذف العرض المنتهي
+              database.ref('offers/' + child.key).remove();
+              return;
+            }
+          }
+          
+          hasActiveOffers = true;
+          
+          // إنشاء بطاقة العرض
+          const offerCard = document.createElement('div');
+          offerCard.className = 'offer-card';
+          offerCard.dataset.id = child.key;
+          
+          // عرض صورة العرض إذا كانت متاحة، أو أيقونة افتراضية
+          const imageContent = offer.imageUrl 
+            ? `<img src="${offer.imageUrl}" alt="${offer.name}" style="width:100%; height:100%; object-fit:contain;">`
+            : `<i class="fas fa-tags"></i>`;
+          
+          // عرض المنتجات المدرجة في العرض
+          let productsList = '';
+          if (offer.products && offer.products.length > 0) {
+            productsList = `
+              <div class="offer-products">
+                <div class="offer-products-title">المنتجات المدرجة:</div>
+                <div class="offer-products-list">
+                  ${offer.products.slice(0, 3).map(p => `
+                    <div class="offer-product-item">${p.name}</div>
+                  `).join('')}
+                  ${offer.products.length > 3 ? `<div class="offer-product-item">+${offer.products.length - 3} منتجات أخرى</div>` : ''}
+                </div>
+              </div>
+            `;
+          }
+          
+          // عرض الوقت المتبقي للعرض إذا كان مؤقتاً
+          let timeRemaining = '';
+          if (offer.autoDelete && offer.endDate) {
+            const endDate = new Date(offer.endDate);
+            timeRemaining = `
+              <div class="time-remaining">
+                <i class="fas fa-clock"></i>
+                <span id="time-remaining-${child.key}"></span>
+              </div>
+            `;
+          }
+          
+          offerCard.innerHTML = `
+            <div class="offer-image">
+              ${imageContent}
+              <div class="offer-badge">خصم ${offer.discountPercentage}</div>
+            </div>
+            <div class="offer-details">
+              <h3 class="offer-name">${offer.name}</h3>
+              <p class="offer-description">${offer.description || 'لا يوجد وصف متاح'}</p>
+              
+              <div class="offer-price">
+                <span class="original-price">${offer.totalWithoutDiscount}</span>
+                <span class="discounted-price">${offer.totalWithDiscount} ل.س</span>
+              </div>
+              
+              ${timeRemaining}
+              ${productsList}
+              
+              <button class="add-offer-to-cart" onclick="addOfferToCart('${child.key}')">
+                <i class="fas fa-shopping-cart"></i> إضافة العرض إلى السلة
+              </button>
+            </div>
+          `;
+          
+          container.appendChild(offerCard);
+          
+          // إذا كان العرض مؤقتاً، قم بتحديث العداد
+          if (offer.autoDelete && offer.endDate) {
+            updateOfferTimer(child.key, offer.endDate);
+          }
+        });
+        
+        // إذا لم توجد عروض نشطة
+        if (!hasActiveOffers) {
+          container.innerHTML = `
+            <div class="empty-category" style="grid-column: 1/-1; text-align: center;">
+              <i class="fas fa-tags"></i>
+              <h3>لا توجد عروض حالياً</h3>
+              <p>لم يتم إضافة أي عروض إلى المتجر بعد</p>
+            </div>
+          `;
+        }
+      });
+    }
+    
+    // تحديث عداد الوقت المتبقي للعرض
+    function updateOfferTimer(offerId, endDateStr) {
+      const endDate = new Date(endDateStr);
+      const timerElement = document.getElementById(`time-remaining-${offerId}`);
+      if (!timerElement) return;
+      
+      function update() {
+        const now = new Date();
+        const diff = endDate - now;
+        
+        if (diff <= 0) {
+          timerElement.textContent = 'انتهى العرض';
+          return;
+        }
+        
+        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+        
+        timerElement.textContent = `${days} يوم ${hours} ساعة ${minutes} دقيقة ${seconds} ثانية`;
+        
+        setTimeout(update, 1000);
+      }
+      
+      update();
+    }
+    
+    // إضافة العرض إلى السلة
+    function addOfferToCart(offerId) {
+      const offer = offerMap[offerId];
+      if (!offer || !offer.products) return;
+      
+      // إضافة جميع منتجات العرض إلى السلة
+      offer.products.forEach(product => {
+        // التحقق مما إذا كان المنتج موجودًا بالفعل في السلة
+        const existingItem = cart.find(item => item.id === product.id);
+        
+        if (existingItem) {
+          existingItem.quantity += 1;
+        } else {
+          cart.push({
+            id: product.id,
+            name: product.name,
+            price: product.price,
+            imageUrl: product.imageUrl,
+            quantity: 1
+          });
+        }
+      });
+      
+      // تحديث عدد العناصر في السلة
+      updateCartCount();
+      
+      // عرض تنبيه
+      showNotification(`تم إضافة عرض "${offer.name}" إلى السلة`);
+      
+      // تحديث عرض السلة إذا كانت مفتوحة
+      if (document.getElementById('cart-page').classList.contains('active')) {
+        updateCartDisplay();
+      }
+    }
+    
     // إضافة منتج إلى السلة
     function addToCart(productId) {
       const product = productMap[productId];
@@ -1563,8 +1885,17 @@
       let message = "السلام عليكم! أريد شراء هذه المنتجات، هل كل شيئ متوفر؟\n\n";
       
       cart.forEach(item => {
-        message += `- ${item.name} (${item.quantity}x)\n`;
+        message += `- ${item.name} (${item.quantity}x) - ${item.price}\n`;
       });
+      
+      // حساب المجموع الكلي
+      const total = cart.reduce((sum, item) => {
+        const priceStr = item.price.replace(/[^0-9]/g, '');
+        const price = parseInt(priceStr) || 0;
+        return sum + (price * item.quantity);
+      }, 0);
+      
+      message += `\nالمجموع الكلي: ${new Intl.NumberFormat('ar-SY').format(total)} ل.س`;
       
       // ترميز الرسالة لرابط الواتساب
       const whatsappUrl = `https://wa.me/963992288487?text=${encodeURIComponent(message)}`;
@@ -1607,10 +1938,6 @@
         notification.remove();
       }, 3000);
     }
-    
-    // إعدادات البحث
-    const searchInput = document.getElementById('search-input');
-    const searchBtn = document.getElementById('search-button');
     
     // وظيفة البحث في منتجات Firebase
     function performSearch() {
@@ -1723,6 +2050,18 @@
         
         if (document.getElementById('products-page').classList.contains('active')) {
           displayProducts();
+        }
+      });
+      
+      // الاستماع للتحديثات الفورية على العروض
+      database.ref('offers').on('value', (snapshot) => {
+        // تحديث خريطة العروض
+        snapshot.forEach(child => {
+          offerMap[child.key] = child.val();
+        });
+        
+        if (document.getElementById('offers-page').classList.contains('active')) {
+          loadOffers();
         }
       });
     });
