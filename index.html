@@ -246,6 +246,35 @@
       border-radius: 2px;
     }
 
+    .search-results-title {
+      text-align: center;
+      margin: 15px 0;
+      font-size: 1.2rem;
+      color: var(--dark-color);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .back-to-products-btn {
+      background: #f1f5f9;
+      border: none;
+      border-radius: 50%;
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--primary-color);
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .back-to-products-btn:hover {
+      background: #ffedd5;
+    }
+
     .under-construction {
       background: white;
       border-radius: var(--border-radius);
@@ -1315,6 +1344,13 @@
       <div class="categories-container" id="categories-container">
       </div>
       
+      <div id="search-results-title" class="search-results-title" style="display: none;">
+        <button class="back-to-products-btn" id="back-from-search">
+          <i class="fas fa-arrow-right"></i>
+        </button>
+        <span id="search-results-text"></span>
+      </div>
+      
       <div class="products-grid" id="products-container">
       </div>
     </div>
@@ -1441,6 +1477,8 @@
     let cart = [];
     let productMap = {};
     let offerMap = {};
+    let isSearching = false;
+    let currentSearchQuery = '';
 
     function showPage(pageId) {
       document.querySelectorAll('.page').forEach(page => {
@@ -1462,8 +1500,17 @@
       }
       
       if (pageId === 'products') {
-        loadCategories();
-        displayProducts();
+        if (isSearching) {
+          document.getElementById('categories-container').style.display = 'none';
+          document.getElementById('search-results-title').style.display = 'flex';
+          document.getElementById('search-results-text').textContent = `نتائج البحث عن "${currentSearchQuery}"`;
+          displaySearchResults(currentSearchQuery);
+        } else {
+          document.getElementById('categories-container').style.display = 'flex';
+          document.getElementById('search-results-title').style.display = 'none';
+          loadCategories();
+          displayProducts();
+        }
       }
       
       if (pageId === 'offers') {
@@ -1510,6 +1557,9 @@
           btn.textContent = category;
           btn.onclick = () => {
             currentCategory = category;
+            isSearching = false;
+            document.getElementById('categories-container').style.display = 'flex';
+            document.getElementById('search-results-title').style.display = 'none';
             displayProducts();
             document.querySelectorAll('.category-btn').forEach(b => {
               b.classList.remove('active');
@@ -1550,7 +1600,6 @@
           productsToDisplay.push({ id: child.key, ...product });
         });
         
-        // ترتيب المنتجات أبجدياً حسب الاسم
         productsToDisplay.sort((a, b) => a.name.localeCompare(b.name, 'ar'));
         
         if (productsToDisplay.length === 0) {
@@ -1643,7 +1692,7 @@
           ${specsTable}
           
           <button class="add-to-cart-btn" onclick="addToCart('${productId}')">إضافة إلى السلة</button>
-          <button class="back-btn" onclick="showPage('products')">العودة إلى المنتجات</button>
+          <button class="back-btn" onclick="isSearching ? displaySearchResults(currentSearchQuery) : showPage('products')">العودة</button>
         </div>
       `;
       
@@ -1954,7 +2003,6 @@
         return;
       }
       
-      // ترتيب المنتجات في السلة أبجدياً حسب الاسم
       const products = cart.filter(item => !item.isOffer)
                            .sort((a, b) => a.name.localeCompare(b.name, 'ar'));
       const offers = cart.filter(item => item.isOffer);
@@ -2135,19 +2183,11 @@
       }, 3000);
     }
     
-    function performSearch() {
-      const query = searchInput.value.trim().toLowerCase();
-      
-      if (!query) {
-        showPage('products');
-        displayProducts();
-        return;
-      }
+    function displaySearchResults(query) {
+      const container = document.getElementById('products-container');
+      container.innerHTML = '';
       
       database.ref('products').once('value').then(snapshot => {
-        const container = document.getElementById('products-container');
-        container.innerHTML = '';
-        
         if (!snapshot.exists()) {
           container.innerHTML = `
             <div class="under-construction" style="grid-column: 1/-1; text-align: center;">
@@ -2175,7 +2215,6 @@
           }
         });
         
-        // ترتيب نتائج البحث أبجدياً
         foundProducts.sort((a, b) => a.name.localeCompare(b.name, 'ar'));
         
         if (foundProducts.length > 0) {
@@ -2221,11 +2260,25 @@
               <i class="fas fa-search"></i>
               <h3>لم يتم العثور على منتجات</h3>
               <p>عذراً، لم نتمكن من العثور على منتجات مطابقة لبحثك: "${query}"</p>
-              <button class="btn" onclick="showPage('products')" style="margin-top: 20px;">عرض جميع المنتجات</button>
+              <button class="btn" onclick="isSearching=false; currentCategory='الكل'; showPage('products')" style="margin-top: 20px;">عرض جميع المنتجات</button>
             </div>
           `;
         }
       });
+    }
+    
+    function performSearch() {
+      const query = searchInput.value.trim().toLowerCase();
+      currentSearchQuery = query;
+      
+      if (!query) {
+        isSearching = false;
+        showPage('products');
+        return;
+      }
+      
+      isSearching = true;
+      showPage('products');
     }
     
     const searchInput = document.getElementById('search-input');
@@ -2239,13 +2292,23 @@
     document.addEventListener('DOMContentLoaded', function() {
       showPage('home');
       
+      document.getElementById('back-from-search').addEventListener('click', function() {
+        searchInput.value = '';
+        isSearching = false;
+        showPage('products');
+      });
+      
       database.ref('products').on('value', (snapshot) => {
         snapshot.forEach(child => {
           productMap[child.key] = child.val();
         });
         
         if (document.getElementById('products-page').classList.contains('active')) {
-          displayProducts();
+          if (isSearching) {
+            displaySearchResults(currentSearchQuery);
+          } else {
+            displayProducts();
+          }
         }
       });
       
