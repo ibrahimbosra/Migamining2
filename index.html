@@ -79,7 +79,7 @@
     }
 
     .hero {
-      background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('https://images.unsplash.com/photo-1511994298241-608e28f14fde?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80');
+      background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('https://i.ibb.co/0jF7kWmL/chinese-motorcycles.jpg');
       background-size: cover;
       background-position: center;
       border-radius: var(--border-radius);
@@ -1537,7 +1537,7 @@
           return;
         }
         
-        let hasProducts = false;
+        let productsToDisplay = [];
         
         snapshot.forEach(child => {
           const product = child.val();
@@ -1547,11 +1547,28 @@
             return;
           }
           
-          hasProducts = true;
-          
+          productsToDisplay.push({ id: child.key, ...product });
+        });
+        
+        // ترتيب المنتجات أبجدياً حسب الاسم
+        productsToDisplay.sort((a, b) => a.name.localeCompare(b.name, 'ar'));
+        
+        if (productsToDisplay.length === 0) {
+          container.innerHTML = `
+            <div class="empty-category" style="grid-column: 1/-1;">
+              <i class="fas fa-box-open"></i>
+              <h3>لا توجد منتجات في هذه الفئة</h3>
+              <p>لم يتم إضافة أي منتجات إلى فئة "${currentCategory}" بعد</p>
+              <button class="btn" onclick="currentCategory='الكل'; displayProducts();" style="margin-top: 20px;">عرض جميع المنتجات</button>
+            </div>
+          `;
+          return;
+        }
+        
+        productsToDisplay.forEach(product => {
           const productCard = document.createElement('div');
           productCard.className = 'product-card';
-          productCard.dataset.id = child.key;
+          productCard.dataset.id = product.id;
           
           const imageContent = product.imageUrl 
             ? `<img src="${product.imageUrl}" alt="${product.name}" style="width:100%; height:100%; object-fit:contain;">`
@@ -1573,28 +1590,17 @@
               e.stopPropagation();
               return;
             }
-            showProductDetails(child.key);
+            showProductDetails(product.id);
           });
           
           const addButton = productCard.querySelector('.add-to-cart');
           addButton.addEventListener('click', function(e) {
             e.stopPropagation();
-            addToCart(child.key);
+            addToCart(product.id);
           });
           
           container.appendChild(productCard);
         });
-        
-        if (!hasProducts && currentCategory !== 'الكل') {
-          container.innerHTML = `
-            <div class="empty-category" style="grid-column: 1/-1;">
-              <i class="fas fa-box-open"></i>
-              <h3>لا توجد منتجات في هذه الفئة</h3>
-              <p>لم يتم إضافة أي منتجات إلى فئة "${currentCategory}" بعد</p>
-              <button class="btn" onclick="currentCategory='الكل'; displayProducts();" style="margin-top: 20px;">عرض جميع المنتجات</button>
-            </div>
-          `;
-        }
       });
     }
     
@@ -1948,7 +1954,9 @@
         return;
       }
       
-      const products = cart.filter(item => !item.isOffer);
+      // ترتيب المنتجات في السلة أبجدياً حسب الاسم
+      const products = cart.filter(item => !item.isOffer)
+                           .sort((a, b) => a.name.localeCompare(b.name, 'ar'));
       const offers = cart.filter(item => item.isOffer);
       
       let cartItemsHtml = '';
@@ -2166,6 +2174,9 @@
             foundProducts.push({ id: child.key, ...product });
           }
         });
+        
+        // ترتيب نتائج البحث أبجدياً
+        foundProducts.sort((a, b) => a.name.localeCompare(b.name, 'ar'));
         
         if (foundProducts.length > 0) {
           foundProducts.forEach(product => {
