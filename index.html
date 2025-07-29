@@ -32,7 +32,7 @@
       padding-bottom: 80px;
       line-height: 1.6;
       overflow-x: hidden;
-      font-size: 14px; /* تصغير حجم الخط العام */
+      font-size: 14px;
     }
 
     header {
@@ -78,7 +78,6 @@
       min-height: calc(100vh - 200px);
     }
 
-    /* صفحة الرئيسية */
     .hero {
       background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('https://images.unsplash.com/photo-1511994298241-608e28f14fde?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80');
       background-size: cover;
@@ -226,7 +225,6 @@
       line-height: 1.7;
     }
 
-    /* تصميم مشترك لصفحات المنتجات والعروض والخصومات */
     .section-title {
       text-align: center;
       margin: 15px 0 25px;
@@ -248,7 +246,6 @@
       border-radius: 2px;
     }
 
-    /* رسالة الصفحة قيد التطوير */
     .under-construction {
       background: white;
       border-radius: var(--border-radius);
@@ -280,7 +277,6 @@
       margin: 0 auto;
     }
 
-    /* صفحة السلة */
     .empty-cart {
       background: white;
       border-radius: var(--border-radius);
@@ -312,7 +308,6 @@
       margin: 0 auto 25px;
     }
 
-    /* صفحة التواصل */
     .contact-container {
       display: flex;
       flex-wrap: wrap;
@@ -460,7 +455,6 @@
       color: white;
     }
 
-    /* التصميم للصفحات المخفية */
     .page {
       display: none;
       animation: fadeIn 0.5s ease;
@@ -470,7 +464,6 @@
       display: block;
     }
 
-    /* التذييل */
     nav {
       position: fixed;
       bottom: 0;
@@ -518,7 +511,6 @@
       margin-bottom: 4px;
     }
 
-    /* تصميم صفحة المنتجات */
     .products-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
@@ -541,7 +533,7 @@
     }
 
     .product-image {
-      height: 160px; /* تصغير حجم صورة المنتج */
+      height: 160px;
       background-color: #f1f5f9;
       display: flex;
       align-items: center;
@@ -555,7 +547,7 @@
     }
 
     .product-name {
-      font-size: 1rem; /* تصغير حجم اسم المنتج */
+      font-size: 1rem;
       margin-bottom: 8px;
       color: var(--dark-color);
     }
@@ -563,7 +555,7 @@
     .product-price {
       font-weight: 700;
       color: var(--primary-dark);
-      font-size: 1.1rem; /* تصغير حجم السعر */
+      font-size: 1.1rem;
       margin-bottom: 12px;
     }
 
@@ -580,14 +572,13 @@
       width: 100%;
       display: block;
       text-align: center;
-      font-size: 0.9rem; /* تصغير حجم الزر */
+      font-size: 0.9rem;
     }
 
     .add-to-cart:hover {
       background: var(--primary-dark);
     }
 
-    /* صفحة تفاصيل المنتج */
     .product-details-container {
       max-width: 750px;
       margin: 0 auto;
@@ -610,11 +601,6 @@
       justify-content: center;
       margin-bottom: 15px;
       border-radius: var(--border-radius);
-    }
-
-    .product-image-large i {
-      font-size: 4rem;
-      color: var(--gray-color);
     }
 
     .product-details-card h2 {
@@ -685,7 +671,7 @@
     .specs-table th, .specs-table td {
       padding: 10px 12px;
       border-bottom: 1px solid #e2e8f0;
-      font-size: 0.9rem; /* تصغير حجم الخط في الجدول */
+      font-size: 0.9rem;
     }
 
     .specs-table th {
@@ -698,7 +684,6 @@
       border-bottom: none;
     }
 
-    /* تصميم الفئات */
     .categories-container {
       display: flex;
       overflow-x: auto;
@@ -753,24 +738,6 @@
       margin-top: 25px;
     }
 
-    .empty-category i {
-      font-size: 2.5rem;
-      color: #cbd5e1;
-      margin-bottom: 12px;
-    }
-
-    .empty-category h3 {
-      font-size: 1.3rem;
-      color: var(--dark-color);
-      margin-bottom: 8px;
-    }
-
-    .empty-category p {
-      color: var(--gray-color);
-      font-size: 1rem;
-    }
-
-    /* تصميم سلة التسوق */
     .cart-items {
       background: white;
       border-radius: var(--border-radius);
@@ -899,7 +866,6 @@
       padding: 10px 20px;
       font-family: 'Cairo', sans-serif;
       font-weight: 700;
-      font-size: 1rem;
       cursor: pointer;
       transition: var(--transition);
       width: 100%;
@@ -912,108 +878,6 @@
       transform: translateY(-3px);
     }
 
-    /* التجاوب */
-    @media (max-width: 768px) {
-      .header-content {
-        flex-direction: column;
-        gap: 12px;
-      }
-      
-      .hero {
-        padding: 30px 15px;
-        min-height: 300px;
-      }
-      
-      .hero h2 {
-        font-size: 1.7rem;
-      }
-      
-      .hero p {
-        font-size: 0.95rem;
-      }
-      
-      .logo h1 {
-        font-size: 1.2rem;
-      }
-      
-      .contact-container {
-        flex-direction: column;
-      }
-      
-      .map-frame {
-        height: 250px;
-      }
-      
-      .products-grid {
-        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-      }
-    }
-
-    @media (max-width: 480px) {
-      .hero {
-        padding: 25px 12px;
-        min-height: 250px;
-      }
-      
-      .hero h2 {
-        font-size: 1.5rem;
-      }
-      
-      .hero p {
-        font-size: 0.9rem;
-      }
-      
-      .search-container {
-        margin: 25px 0;
-      }
-      
-      .btn {
-        padding: 10px 20px;
-        font-size: 0.9rem;
-      }
-      
-      .section-title {
-        font-size: 1.3rem;
-      }
-      
-      .contact-address {
-        font-size: 0.75rem;
-        white-space: normal;
-      }
-      
-      .under-construction, .empty-cart {
-        padding: 25px 12px;
-      }
-
-      .products-grid {
-        grid-template-columns: 1fr;
-      }
-      
-      .product-details-card {
-        padding: 15px;
-      }
-      
-      .product-image-large {
-        height: 180px;
-      }
-      
-      .category-btn {
-        padding: 6px 12px;
-        font-size: 0.85rem;
-      }
-      
-      .cart-item {
-        flex-direction: column;
-        align-items: flex-start;
-      }
-      
-      .cart-item-image {
-        margin-left: 0;
-        margin-bottom: 8px;
-      }
-    }
-
-    /* التعديلات الجديدة */
     .cart-count-nav {
       position: absolute;
       top: 0;
@@ -1029,7 +893,6 @@
       justify-content: center;
     }
 
-    /* تصميم صفحة العروض */
     .offers-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
@@ -1053,7 +916,7 @@
     }
 
     .offer-image {
-      height: 150px; /* تصغير حجم صورة العرض */
+      height: 150px;
       background-color: #f1f5f9;
       display: flex;
       align-items: center;
@@ -1080,7 +943,7 @@
     }
 
     .offer-name {
-      font-size: 1.1rem; /* تصغير حجم اسم العرض */
+      font-size: 1.1rem;
       margin-bottom: 8px;
       color: var(--dark-color);
     }
@@ -1089,7 +952,7 @@
       color: var(--gray-color);
       margin-bottom: 12px;
       line-height: 1.6;
-      font-size: 0.9rem; /* تصغير حجم الوصف */
+      font-size: 0.9rem;
     }
 
     .offer-price {
@@ -1108,7 +971,7 @@
     .discounted-price {
       font-weight: 700;
       color: var(--primary-dark);
-      font-size: 1.1rem; /* تصغير حجم السعر المخصوم */
+      font-size: 1.1rem;
     }
 
     .offer-products {
@@ -1161,14 +1024,13 @@
       display: block;
       text-align: center;
       margin-top: 12px;
-      font-size: 0.9rem; /* تصغير حجم الزر */
+      font-size: 0.9rem;
     }
 
     .add-offer-to-cart:hover {
       background: #059669;
     }
 
-    /* صفحة تفاصيل العرض */
     .offer-details-container {
       max-width: 800px;
       margin: 0 auto;
@@ -1298,7 +1160,6 @@
       background: #cbd5e1;
     }
 
-    /* إشعارات */
     .notification {
       position: fixed;
       top: 20px;
@@ -1316,6 +1177,106 @@
       from { opacity: 1; }
       to { opacity: 0; display: none; }
     }
+
+    @media (max-width: 768px) {
+      .header-content {
+        flex-direction: column;
+        gap: 12px;
+      }
+      
+      .hero {
+        padding: 30px 15px;
+        min-height: 300px;
+      }
+      
+      .hero h2 {
+        font-size: 1.7rem;
+      }
+      
+      .hero p {
+        font-size: 0.95rem;
+      }
+      
+      .logo h1 {
+        font-size: 1.2rem;
+      }
+      
+      .contact-container {
+        flex-direction: column;
+      }
+      
+      .map-frame {
+        height: 250px;
+      }
+      
+      .products-grid {
+        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      }
+    }
+
+    @media (max-width: 480px) {
+      .hero {
+        padding: 25px 12px;
+        min-height: 250px;
+      }
+      
+      .hero h2 {
+        font-size: 1.5rem;
+      }
+      
+      .hero p {
+        font-size: 0.9rem;
+      }
+      
+      .search-container {
+        margin: 25px 0;
+      }
+      
+      .btn {
+        padding: 10px 20px;
+        font-size: 0.9rem;
+      }
+      
+      .section-title {
+        font-size: 1.3rem;
+      }
+      
+      .contact-address {
+        font-size: 0.75rem;
+        white-space: normal;
+      }
+      
+      .under-construction, .empty-cart {
+        padding: 25px 12px;
+      }
+
+      .products-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .product-details-card {
+        padding: 15px;
+      }
+      
+      .product-image-large {
+        height: 180px;
+      }
+      
+      .category-btn {
+        padding: 6px 12px;
+        font-size: 0.85rem;
+      }
+      
+      .cart-item {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      
+      .cart-item-image {
+        margin-left: 0;
+        margin-bottom: 8px;
+      }
+    }
   </style>
 </head>
 <body>
@@ -1328,9 +1289,7 @@
     </div>
   </header>
   
-  <!-- محتوى الصفحات -->
   <div class="page-container">
-    <!-- الصفحة الرئيسية -->
     <div id="home-page" class="page active">
       <div class="hero">
         <h2>أفضل قطع الغيار للدراجات النارية</h2>
@@ -1350,43 +1309,33 @@
       </div>
     </div>
     
-    <!-- صفحة المنتجات -->
     <div id="products-page" class="page">
       <h2 class="section-title">المنتجات المتوفرة</h2>
       
       <div class="categories-container" id="categories-container">
-        <!-- سيتم ملؤها بالجافاسكريبت -->
       </div>
       
       <div class="products-grid" id="products-container">
-        <!-- سيتم عرض المنتجات هنا -->
       </div>
     </div>
     
-    <!-- صفحة تفاصيل المنتج -->
     <div id="product-details-page" class="page">
       <div class="product-details-container" id="product-details-container">
-        <!-- سيتم ملؤها بالبيانات عبر الجافاسكريبت -->
       </div>
     </div>
     
-    <!-- صفحة العروض -->
     <div id="offers-page" class="page">
       <h2 class="section-title">العروض الخاصة</h2>
       
       <div class="offers-grid" id="offers-container">
-        <!-- سيتم عرض العروض هنا -->
       </div>
     </div>
     
-    <!-- صفحة تفاصيل العرض -->
     <div id="offer-details-page" class="page">
       <div class="offer-details-container" id="offer-details-container">
-        <!-- سيتم ملؤها بالبيانات عبر الجافاسكريبت -->
       </div>
     </div>
     
-    <!-- صفحة سلة التسوق -->
     <div id="cart-page" class="page">
       <h2 class="section-title">سلة التسوق</h2>
       
@@ -1400,7 +1349,6 @@
       </div>
     </div>
     
-    <!-- صفحة التواصل -->
     <div id="contact-page" class="page">
       <h2 class="section-title">تواصل معنا</h2>
       
@@ -1471,12 +1419,10 @@
     </button>
   </nav>
 
-  <!-- Firebase SDK -->
   <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
 
   <script>
-    // التهيئة باستخدام بيانات Firebase نفسها المستخدمة في لوحة التحكم
     const firebaseConfig = {
       apiKey: "AIzaSyARTj0C63mKNHuhp0kxdciczVS4_vMxbJo",
       authDomain: "partzoneadmin.firebaseapp.com",
@@ -1487,33 +1433,26 @@
       appId: "1:714743852681:web:16b478deb50024952c2058"
     };
 
-    // Initialize Firebase
     firebase.initializeApp(firebaseConfig);
     const database = firebase.database();
 
-    // متغيرات النظام
     let currentCategory = 'الكل';
     let categories = [];
     let cart = [];
     let productMap = {};
     let offerMap = {};
 
-    // وظيفة إظهار الصفحة المحددة وإخفاء البقية
     function showPage(pageId) {
-      // إخفاء جميع الصفحات
       document.querySelectorAll('.page').forEach(page => {
         page.classList.remove('active');
       });
       
-      // إظهار الصفحة المحددة
       document.getElementById(`${pageId}-page`).classList.add('active');
       
-      // تحديث التذييل
       document.querySelectorAll('.nav-btn').forEach(btn => {
         btn.classList.remove('active');
       });
       
-      // تحديد الزر النشط في التذييل
       const activeButton = Array.from(document.querySelectorAll('.nav-btn')).find(btn => {
         return btn.getAttribute('onclick') === `showPage('${pageId}')`;
       });
@@ -1522,24 +1461,20 @@
         activeButton.classList.add('active');
       }
       
-      // إذا كانت صفحة المنتجات، قم بعرض الفئات والمنتجات
       if (pageId === 'products') {
         loadCategories();
         displayProducts();
       }
       
-      // إذا كانت صفحة العروض، قم بتحميل العروض
       if (pageId === 'offers') {
         loadOffers();
       }
       
-      // إذا كانت صفحة السلة، قم بتحديث محتواها
       if (pageId === 'cart') {
         updateCartDisplay();
       }
     }
     
-    // تحميل الفئات من Firebase
     function loadCategories() {
       database.ref('categories').once('value').then(snapshot => {
         const container = document.getElementById('categories-container');
@@ -1548,7 +1483,6 @@
         if (snapshot.exists()) {
           categories = Object.values(snapshot.val());
         } else {
-          // إذا لم تكن هناك فئات، استخدم القائمة الافتراضية
           categories = [
             "الكل",
             "القطع الهيكلية",
@@ -1563,12 +1497,10 @@
           ];
         }
         
-        // إضافة فئة "الكل" في البداية إذا لم تكن موجودة
         if (!categories.includes('الكل')) {
           categories.unshift('الكل');
         }
         
-        // عرض أزرار الفئات
         categories.forEach(category => {
           const btn = document.createElement('button');
           btn.className = 'category-btn';
@@ -1579,7 +1511,6 @@
           btn.onclick = () => {
             currentCategory = category;
             displayProducts();
-            // تحديث حالة الأزرار النشطة
             document.querySelectorAll('.category-btn').forEach(b => {
               b.classList.remove('active');
             });
@@ -1590,7 +1521,6 @@
       });
     }
     
-    // عرض المنتجات حسب الفئة المحددة
     function displayProducts() {
       const container = document.getElementById('products-container');
       container.innerHTML = '';
@@ -1611,10 +1541,8 @@
         
         snapshot.forEach(child => {
           const product = child.val();
-          // تخزين المنتج في productMap للوصول السريع
           productMap[child.key] = product;
           
-          // تصفية المنتجات حسب الفئة المحددة
           if (currentCategory !== 'الكل' && product.category !== currentCategory) {
             return;
           }
@@ -1625,7 +1553,6 @@
           productCard.className = 'product-card';
           productCard.dataset.id = child.key;
           
-          // عرض الصورة إذا كانت متاحة، أو أيقونة افتراضية
           const imageContent = product.imageUrl 
             ? `<img src="${product.imageUrl}" alt="${product.name}" style="width:100%; height:100%; object-fit:contain;">`
             : `<i class="fas fa-cog"></i>`;
@@ -1641,9 +1568,7 @@
             </div>
           `;
           
-          // جعل البطاقة قابلة للنقل لصفحة التفاصيل
           productCard.addEventListener('click', function(e) {
-            // منع تنشيط النقر عند الضغط على زر إضافة إلى السلة
             if (e.target.classList.contains('add-to-cart')) {
               e.stopPropagation();
               return;
@@ -1651,7 +1576,6 @@
             showProductDetails(child.key);
           });
           
-          // إضافة حدث النقر لزر إضافة إلى السلة
           const addButton = productCard.querySelector('.add-to-cart');
           addButton.addEventListener('click', function(e) {
             e.stopPropagation();
@@ -1661,7 +1585,6 @@
           container.appendChild(productCard);
         });
         
-        // إذا لم توجد منتجات في الفئة المحددة
         if (!hasProducts && currentCategory !== 'الكل') {
           container.innerHTML = `
             <div class="empty-category" style="grid-column: 1/-1;">
@@ -1675,19 +1598,16 @@
       });
     }
     
-    // عرض تفاصيل المنتج من Firebase
     function showProductDetails(productId) {
       const product = productMap[productId];
       if (!product) return;
       
       const container = document.getElementById('product-details-container');
       
-      // عرض الصورة إذا كانت متاحة، أو أيقونة افتراضية
       const imageContent = product.imageUrl 
         ? `<img src="${product.imageUrl}" alt="${product.name}" style="width:100%; height:100%; object-fit:contain;">`
         : `<i class="fas fa-cog"></i>`;
       
-      // إنشاء جدول المواصفات (عكس اسم الخاصية والقيمة)
       let specsTable = '';
       if (product.specifications) {
         specsTable = `
@@ -1724,7 +1644,6 @@
       showPage('product-details');
     }
     
-    // تحميل العروض من Firebase
     function loadOffers() {
       const container = document.getElementById('offers-container');
       container.innerHTML = '';
@@ -1747,13 +1666,11 @@
           const offer = child.val();
           offerMap[child.key] = offer;
           
-          // التحقق من انتهاء مدة العرض إذا كان مؤقتاً
           if (offer.autoDelete && offer.endDate) {
             const endDate = new Date(offer.endDate);
             const now = new Date();
             
             if (endDate <= now) {
-              // حذف العرض المنتهي
               database.ref('offers/' + child.key).remove();
               return;
             }
@@ -1761,17 +1678,14 @@
           
           hasActiveOffers = true;
           
-          // إنشاء بطاقة العرض
           const offerCard = document.createElement('div');
           offerCard.className = 'offer-card';
           offerCard.dataset.id = child.key;
           
-          // عرض صورة العرض إذا كانت متاحة، أو أيقونة افتراضية
           const imageContent = offer.imageUrl 
             ? `<img src="${offer.imageUrl}" alt="${offer.name}" style="width:100%; height:100%; object-fit:contain;">`
             : `<i class="fas fa-tags"></i>`;
           
-          // عرض المنتجات المدرجة في العرض
           let productsList = '';
           if (offer.products && offer.products.length > 0) {
             productsList = `
@@ -1787,10 +1701,8 @@
             `;
           }
           
-          // عرض الوقت المتبقي للعرض إذا كان مؤقتاً
           let timeRemaining = '';
           if (offer.autoDelete && offer.endDate) {
-            const endDate = new Date(offer.endDate);
             timeRemaining = `
               <div class="time-remaining">
                 <i class="fas fa-clock"></i>
@@ -1822,9 +1734,7 @@
             </div>
           `;
           
-          // جعل البطاقة قابلة للنقل لصفحة تفاصيل العرض
           offerCard.addEventListener('click', function(e) {
-            // منع تنشيط النقر عند الضغط على زر إضافة إلى السلة
             if (e.target.classList.contains('add-offer-to-cart')) {
               e.stopPropagation();
               return;
@@ -1834,13 +1744,11 @@
           
           container.appendChild(offerCard);
           
-          // إذا كان العرض مؤقتاً، قم بتحديث العداد
           if (offer.autoDelete && offer.endDate) {
             updateOfferTimer(child.key, offer.endDate);
           }
         });
         
-        // إذا لم توجد عروض نشطة
         if (!hasActiveOffers) {
           container.innerHTML = `
             <div class="empty-category" style="grid-column: 1/-1; text-align: center;">
@@ -1853,22 +1761,18 @@
       });
     }
     
-    // عرض تفاصيل العرض
     function showOfferDetails(offerId) {
       const offer = offerMap[offerId];
       if (!offer) return;
       
       const container = document.getElementById('offer-details-container');
       
-      // عرض صورة العرض إذا كانت متاحة، أو أيقونة افتراضية
       const imageContent = offer.imageUrl 
         ? `<img src="${offer.imageUrl}" alt="${offer.name}" style="width:100%; height:100%; object-fit:contain;">`
         : `<i class="fas fa-tags"></i>`;
       
-      // عرض الوقت المتبقي للعرض إذا كان مؤقتاً
       let timeRemaining = '';
       if (offer.autoDelete && offer.endDate) {
-        const endDate = new Date(offer.endDate);
         timeRemaining = `
           <div class="time-remaining-large">
             <i class="fas fa-clock"></i>
@@ -1877,7 +1781,6 @@
         `;
       }
       
-      // عرض المنتجات في العرض
       let productsGrid = '';
       if (offer.products && offer.products.length > 0) {
         productsGrid = `
@@ -1924,12 +1827,10 @@
         </div>
       `;
       
-      // إذا كان العرض مؤقتاً، قم بتحديث العداد
       if (offer.autoDelete && offer.endDate) {
         updateOfferTimer(`details-${offerId}`, offer.endDate);
       }
       
-      // إضافة أحداث النقر للمنتجات داخل العرض
       const productsGridContainer = document.getElementById(`offer-products-grid-${offerId}`);
       if (productsGridContainer) {
         productsGridContainer.querySelectorAll('.product-card').forEach(card => {
@@ -1943,7 +1844,6 @@
       showPage('offer-details');
     }
     
-    // تحديث عداد الوقت المتبقي للعرض
     function updateOfferTimer(offerId, endDateStr) {
       const endDate = new Date(endDateStr);
       const timerElement = document.getElementById(`time-remaining-${offerId}`);
@@ -1971,12 +1871,10 @@
       update();
     }
     
-    // إضافة العرض إلى السلة كبند واحد
     function addOfferToCart(offerId) {
       const offer = offerMap[offerId];
       if (!offer) return;
       
-      // التحقق مما إذا كان العرض موجودًا بالفعل في السلة
       const existingItem = cart.find(item => item.id === offerId && item.isOffer);
       
       if (existingItem) {
@@ -1993,24 +1891,19 @@
         });
       }
       
-      // تحديث عدد العناصر في السلة
       updateCartCount();
       
-      // عرض تنبيه
       showNotification(`تم إضافة عرض "${offer.name}" إلى السلة`);
       
-      // تحديث عرض السلة إذا كانت مفتوحة
       if (document.getElementById('cart-page').classList.contains('active')) {
         updateCartDisplay();
       }
     }
     
-    // إضافة منتج إلى السلة
     function addToCart(productId) {
       const product = productMap[productId];
       if (!product) return;
       
-      // التحقق مما إذا كان المنتج موجودًا بالفعل في السلة
       const existingItem = cart.find(item => item.id === productId && !item.isOffer);
       
       if (existingItem) {
@@ -2026,25 +1919,20 @@
         });
       }
       
-      // تحديث عدد العناصر في السلة
       updateCartCount();
       
-      // عرض تنبيه
       showNotification(`تم إضافة "${product.name}" إلى السلة`);
       
-      // تحديث عرض السلة إذا كانت مفتوحة
       if (document.getElementById('cart-page').classList.contains('active')) {
         updateCartDisplay();
       }
     }
     
-    // تحديث عدد العناصر في السلة (في شريط التنقل)
     function updateCartCount() {
       const count = cart.reduce((total, item) => total + item.quantity, 0);
       document.querySelector('.cart-count-nav').textContent = count;
     }
     
-    // تحديث عرض السلة مع تقسيم المنتجات والعروض
     function updateCartDisplay() {
       const container = document.getElementById('cart-content');
       
@@ -2060,20 +1948,17 @@
         return;
       }
       
-      // فصل المنتجات عن العروض
       const products = cart.filter(item => !item.isOffer);
       const offers = cart.filter(item => item.isOffer);
       
       let cartItemsHtml = '';
       let totalPrice = 0;
       
-      // عرض المنتجات
       if (products.length > 0) {
         cartItemsHtml += `
           <div class="cart-items">
             <h3 class="cart-section-title">المنتجات</h3>
             ${products.map(item => {
-              // تحويل السعر إلى رقم (إزالة النقاط والفاصلة)
               const priceStr = item.price.replace(/[^0-9]/g, '');
               const price = parseInt(priceStr) || 0;
               const itemTotal = price * item.quantity;
@@ -2103,13 +1988,11 @@
         `;
       }
       
-      // عرض العروض
       if (offers.length > 0) {
         cartItemsHtml += `
           <div class="cart-items">
             <h3 class="cart-section-title">العروض</h3>
             ${offers.map(item => {
-              // تحويل سعر العرض إلى رقم
               const priceStr = item.price.replace(/[^0-9]/g, '');
               const price = parseInt(priceStr) || 0;
               const itemTotal = price * item.quantity;
@@ -2139,7 +2022,6 @@
         `;
       }
       
-      // تنسيق السعر الإجمالي
       const formattedTotal = new Intl.NumberFormat('ar-SY').format(totalPrice) + ' ل.س';
       
       container.innerHTML = `
@@ -2155,24 +2037,20 @@
       `;
     }
     
-    // تحديث كمية المنتج/العرض في السلة
     function updateQuantity(itemId, change, isOffer) {
       const item = cart.find(item => item.id === itemId && item.isOffer === isOffer);
       if (!item) return;
       
       item.quantity += change;
       
-      // التأكد من أن الكمية لا تقل عن 1
       if (item.quantity < 1) {
         item.quantity = 1;
       }
       
-      // تحديث عرض السلة
       updateCartDisplay();
       updateCartCount();
     }
     
-    // تحديث الكمية من حقل الإدخال
     function updateQuantityInput(itemId, value, isOffer) {
       const quantity = parseInt(value) || 1;
       if (quantity < 1) return;
@@ -2185,26 +2063,21 @@
       }
     }
     
-    // إزالة منتج/عرض من السلة
     function removeFromCart(itemId, isOffer) {
       cart = cart.filter(item => !(item.id === itemId && item.isOffer === isOffer));
       updateCartDisplay();
       updateCartCount();
       
-      // إذا أصبحت السلة فارغة
       if (cart.length === 0) {
         showPage('cart');
       }
     }
     
-    // إتمام عملية الشراء عبر الواتساب
     function checkout() {
       if (cart.length === 0) return;
       
-      // بناء رسالة الواتساب
       let message = "السلام عليكم! أريد شراء هذه المنتجات والعروض، هل كل شيئ متوفر؟\n\n";
       
-      // إضافة المنتجات
       const products = cart.filter(item => !item.isOffer);
       if (products.length > 0) {
         message += "المنتجات:\n";
@@ -2214,7 +2087,6 @@
         message += "\n";
       }
       
-      // إضافة العروض
       const offers = cart.filter(item => item.isOffer);
       if (offers.length > 0) {
         message += "العروض:\n";
@@ -2224,7 +2096,6 @@
         message += "\n";
       }
       
-      // حساب المجموع الكلي
       const total = cart.reduce((sum, item) => {
         const priceStr = item.price.replace(/[^0-9]/g, '');
         const price = parseInt(priceStr) || 0;
@@ -2233,37 +2104,29 @@
       
       message += `\nالمجموع الكلي: ${new Intl.NumberFormat('ar-SY').format(total)} ل.س`;
       
-      // ترميز الرسالة لرابط الواتساب
       const whatsappUrl = `https://wa.me/963992288487?text=${encodeURIComponent(message)}`;
       
-      // فتح رابط الواتساب في نافذة جديدة
       window.open(whatsappUrl, '_blank');
       
-      // تفريغ السلة
       cart = [];
       updateCartCount();
       updateCartDisplay();
       
-      // عرض تنبيه
       showNotification('تم إرسال طلبك بنجاح عبر الواتساب!');
     }
     
-    // عرض تنبيه
     function showNotification(message) {
-      // إنشاء عنصر التنبيه
       const notification = document.createElement('div');
       notification.className = 'notification';
       notification.textContent = message;
       
       document.body.appendChild(notification);
       
-      // إزالة التنبيه بعد 3 ثوانٍ
       setTimeout(() => {
         notification.remove();
       }, 3000);
     }
     
-    // وظيفة البحث في منتجات Firebase
     function performSearch() {
       const query = searchInput.value.trim().toLowerCase();
       
@@ -2333,7 +2196,6 @@
               showProductDetails(product.id);
             });
             
-            // إضافة حدث النقر لزر إضافة إلى السلة
             const addButton = productCard.querySelector('.add-to-cart');
             addButton.addEventListener('click', function(e) {
               e.stopPropagation();
@@ -2355,7 +2217,6 @@
       });
     }
     
-    // ربط أحداث البحث
     const searchInput = document.getElementById('search-input');
     const searchBtn = document.getElementById('search-button');
     
@@ -2364,13 +2225,10 @@
       if (e.key === 'Enter') performSearch();
     });
     
-    // تهيئة الصفحة الرئيسية عند التحميل
     document.addEventListener('DOMContentLoaded', function() {
       showPage('home');
       
-      // الاستماع للتحديثات الفورية على المنتجات
       database.ref('products').on('value', (snapshot) => {
-        // تحديث خريطة المنتجات
         snapshot.forEach(child => {
           productMap[child.key] = child.val();
         });
@@ -2380,9 +2238,7 @@
         }
       });
       
-      // الاستماع للتحديثات الفورية على العروض
       database.ref('offers').on('value', (snapshot) => {
-        // تحديث خريطة العروض
         snapshot.forEach(child => {
           offerMap[child.key] = child.val();
         });
