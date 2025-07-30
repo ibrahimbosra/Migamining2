@@ -39,7 +39,7 @@
       background: linear-gradient(to right, var(--dark-color), #0f172a);
       color: var(--light-color);
       text-align: center;
-      padding: 1rem;
+      padding: 0.5rem;
       position: sticky;
       top: 0;
       z-index: 100;
@@ -145,7 +145,7 @@
 
     .search-container {
       display: flex;
-      margin: 30px auto;
+      margin: 0 auto 15px;
       background: white;
       border-radius: 30px;
       overflow: hidden;
@@ -1318,17 +1318,17 @@
     </div>
   </header>
   
+  <div class="search-container">
+    <input type="text" id="search-input" class="search-input" placeholder="ابحث عن قطعة غيار...">
+    <button class="search-btn" id="search-button"><i class="fas fa-search"></i></button>
+  </div>
+  
   <div class="page-container">
     <div id="home-page" class="page active">
       <div class="hero">
         <h2>أفضل قطع الغيار للدراجات النارية</h2>
         <p>جودة عالية وأسعار تنافسية</p>
         <button class="btn" onclick="showPage('products')">تصفح المنتجات الآن</button>
-      </div>
-      
-      <div class="search-container">
-        <input type="text" id="search-input" class="search-input" placeholder="ابحث عن قطعة غيار...">
-        <button class="search-btn" id="search-button"><i class="fas fa-search"></i></button>
       </div>
       
       <div class="return-policy">
