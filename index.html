@@ -84,7 +84,7 @@
       background-position: center;
       border-radius: var(--border-radius);
       padding: 50px 25px;
-      margin: 15px 0;
+      margin: 5px 0 15px; /* Reduced top margin */
       color: white;
       text-align: center;
       box-shadow: var(--box-shadow);
@@ -93,7 +93,7 @@
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      min-height: 350px;
+      min-height: 300px; /* Adjusted height */
     }
 
     @keyframes fadeIn {
@@ -145,7 +145,7 @@
 
     .search-container {
       display: flex;
-      margin: 0 auto 15px;
+      margin: 0 auto 5px; /* Reduced bottom margin */
       background: white;
       border-radius: 30px;
       overflow: hidden;
@@ -196,7 +196,7 @@
 
     .rotating-banners-container {
       max-width: 750px;
-      margin: 40px auto;
+      margin: 20px auto; /* Reduced margin */
       height: 150px;
       position: relative;
       overflow: hidden;
@@ -1242,7 +1242,7 @@
       
       .hero {
         padding: 30px 15px;
-        min-height: 300px;
+        min-height: 280px; /* Adjusted for mobile */
       }
       
       .hero h2 {
@@ -1276,7 +1276,7 @@
 
     @media (max-width: 480px) {
       .hero {
-        padding: 25px 12px;
+        padding: 20px 12px; /* Adjusted padding */
         min-height: 250px;
       }
       
@@ -1286,10 +1286,6 @@
       
       .hero p {
         font-size: 0.9rem;
-      }
-      
-      .search-container {
-        margin: 25px 0;
       }
       
       .btn {
@@ -1339,7 +1335,7 @@
       
       .rotating-banners-container {
         height: 180px;
-        margin: 25px auto;
+        margin: 15px auto; /* Adjusted margin */
       }
       
       .banner h3 {
@@ -2327,13 +2323,6 @@
     
     function createRotatingBanners() {
       const banners = [
-        {
-          icon: 'fas fa-undo-alt',
-          title: 'سياسة الإرجاع والاستبدال',
-          description: 'رضاكم أولويتنا – يمكنكم استرجاع المنتج خلال 24 ساعة إذا وُجد فيه عيب مصنعي.',
-          color: '#10b981',
-          background: '#f0fdfa'
-        },
         {
           icon: 'fas fa-heart',
           title: 'راحتكم أولويتنا',
